@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Scsbuster</title>
+    <title>SCSBuster</title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
@@ -10,6 +10,13 @@
   </head>
 
   <body>
-    <%= yield %>
+    <div id="scsbuster">
+      <header class="app-header">
+        <h1 class="title">SCSBuster</h1>
+      </header>
+      <div class="nypl-full-width-wrapper app-content">
+        <%= yield %>
+      <div>
+    </div>
   </body>
 </html>
