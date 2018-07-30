@@ -1,1 +1,17 @@
-Why? Bescuzz.
+<h2>Update SCSB Metadata</h2>
+
+<% flash.each do |key, value| %>
+  <div class="alert alert-<%= key %>"><%= value %></div>
+<% end %>
+
+<%= form_tag action: 'send_metadata' do -%>
+  <div>
+    <p>
+      <label class="required">Barcode(s)</label> Required<br/>
+      <%= text_area_tag :barcodes, nil, { class: 'required', rows: 50, cols: 75 } %><br/>
+      Please paste / enter a list of 14-digit barcodes.<br/> 
+      Protect GCD<%= check_box_tag(:protect_gcd, true, false) %><br/>
+      <%= submit_tag 'Submit' %>
+    </p>
+  </div>
+<% end -%>
