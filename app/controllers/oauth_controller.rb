@@ -19,14 +19,16 @@ class OauthController < ApplicationController
     client_secret = CLIENT_SECRET
     authorize_url = OAUTH_AUTH_URL
     token_url     = OAUTH_TOKEN_URL
-    redirect_uri  = 'http://local.nypl.org:3000/callback'
+    redirect_uri  = OAUTH_CALLBACK_URL
+    login_url     = OAUTH_LOGIN_URL
 
     client = OAuth2::Client.new(client_id, client_secret, :authorize_url => authorize_url, :token_url => token_url)
-    puts redirect_uri
-    puts client_secret
-    puts client_id
-    puts authorize_url
-    puts token_url
+    puts "REDIRECT: " + redirect_uri
+    puts "CLIENT_SECRET: " + client_secret
+    puts "CLIENT_ID: " + client_id
+    puts "AUTHORIZE_URL: " + authorize_url
+    puts "TOKEN_URL: " + token_url
+    puts "LOGIN URL: " + login_url
 
     client.auth_code.authorize_url(:redirect_uri => redirect_uri)
 
