@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   get "transfer_metadata", controller: 'items', action: 'transfer_metadata'
   get "update_metadata", controller: 'items', action: 'update_metadata'
   get "login", controller: 'oauth', action: 'login'
-  root controller: 'items', :action => 'update_metadata'
+  get "callback", controller: 'oauth', action: 'callback'
+  root controller: 'oauth', :action => 'login'
 end
 
