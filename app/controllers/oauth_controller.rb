@@ -1,47 +1,62 @@
 class OauthController < ApplicationController
-  def login
-    require 'oauth2'
-    require 'securerandom'
+    def initialize
+        require 'oauth2'
+        require 'securerandom'
 
-    # TODO: Do we have ISSO log in cookies? Should we have one?
-    # TODO: Check the URL link pattern to see if it matches the pattern /auth/provider or /callback
-    # If no, check the log in status. If not log in
+        # OAuth2 authentication process:
+        # 1. Construct the authorize URL to ISSO with required parameters, such as,
+        # client ID, client secret, redirect URI, state, and scope
+        # 2. Redirect the user to the authorize URL for logging in
+        # 3. After logged in, redirect the user back to our application.
+        # The redirect URL should now come with an authorization code.
+        # 4. Get the acceess token with the authorization code by requesting to the access token URL of ISSO.
+        # And redirect back to the redirect URI again.
+        # 5. Includes the access token we just got in the header for making HTTP requests.
 
-    client_id     = CLIENT_ID
-    client_secret = CLIENT_SECRET
-    authorize_url = OAUTH_AUTH_URL
-    token_url     = OAUTH_TOKEN_URL
-    redirect_uri  = 'http://local.nypl.org:3001/callback'
-    login_url     = OAUTH_LOGIN_URL
+        # Set up the variables for OAuth2 Client instance and ISSO log in URL
+        client_id      = CLIENT_ID
+        client_secret  = CLIENT_SECRET
+        oauth_site     = OAUTH_SITE
+        @redirect_uri  = APP_ENV == 'development' ? DEV_OAUTH_CALLBACK_URL : OAUTH_CALLBACK_URL
+        @state         = SecureRandom.alphanumeric(24)
+        @scope         = 'login:staff'
 
-    state = SecureRandom.alphanumeric(24)
+        # Construct the OAuth2 client instance
+        @client = OAuth2::Client.new(
+            client_id,
+            client_secret,
+            site: oauth_site
+        )
+    end
 
-    client = OAuth2::Client.new(client_id, client_secret, site: 'https://isso.nypl.org')
-    isso_url = client.auth_code.authorize_url(:redirect_uri => redirect_uri) + '&state=' + state + '&scope=login:staff'
+    def login
+        # TODO: Do we have ISSO log in cookies? Should we have one?
+        # TODO: Check the URL link pattern to see if it matches the pattern /auth/provider or /callback
+        # If no, check the log in status. If not, start OAuth authentication process
 
-    redirect_to isso_url
-  end
+        # Set the authorize URL with required parameters, client ID, client secret, redirect URI, state, and scope
+        isso_url = @client.auth_code.authorize_url(:redirect_uri => @redirect_uri) + '&state=' + @state + '&scope=' + @scope
 
-  def callback
-    puts 'callback!!'
+        # Redirect to the authorize URL
+        redirect_to isso_url
+    end
 
-    redirect_uri  = 'http://local.nypl.org:3001/callback'
-    client_id     = CLIENT_ID
-    client_secret = CLIENT_SECRET
+    def callback
+        puts 'callback!!'
 
-    client = OAuth2::Client.new(client_id, client_secret, site: 'https://isso.nypl.org')
-    token = client.auth_code.get_token(params[:code], :redirect_uri => redirect_uri)
+        # Get the access token and other params with the authorization code, params[:code]
+        @token = @client.auth_code.get_token(params[:code], :redirect_uri => @redirect_uri)
 
-    puts token.token
-    puts token.expires_in
-    puts token.refresh_token
-    puts token.options
-    puts token.params
+        puts @token.token
+        puts @token.expires_in
+        puts @token.refresh_token
+        puts @token.options
+        puts @token.params
 
-    # Now we can put "Authorization: bearer token.token" in the header when making an HTTP request
-    # TODO: we need an authorization to check if the user is on the white list of the scsbuster
-  end
+        # Now we can put "Authorization: bearer token.token" in the header when making an HTTP request
+        # TODO: we need an authorization to check if the user is on the white list of the scsbuster
+    end
 
-  def refresh_oauth_token
-  end
+    def refresh_oauth_token
+    end
 end
