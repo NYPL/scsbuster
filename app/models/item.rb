@@ -12,12 +12,8 @@ class Item
     )
     
     sqs = Aws::SQS::Client.new(region: 'us-east-1')
-    queue_url = 'https://sqs.us-east-1.amazonaws.com/224280085904/rem-rarities-and-b-sides-temp'
-    
-    
-    resp = sqs.send_message_batch({
-      queue_url: queue_url,
-      entries: [
+    queue_url = SQS_QUEUE_URL
+    some_array_of_entries = [
         {
           id: '1',
           message_body: 'Crazy'
@@ -30,10 +26,12 @@ class Item
           id: '3',
           message_body: 'Burning Down'
         }
-      ],
-    })
-    require 'pry' ; binding.pry;
+      ]
     
+    resp = sqs.send_message_batch({
+      queue_url: queue_url,
+      entries: some_array_of_entries,
+    })
   end
   
   def refile
