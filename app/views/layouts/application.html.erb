@@ -14,6 +14,13 @@
       <header class="app-header">
         <h1 class="title">SCSBuster</h1>
       </header>
+      <nav class="">
+        <ul>
+          <li><%= link_to "Update Metadata", update_metadata_path %></li>
+          <li><%= link_to "Transfer Barcode & Update Metadata", transfer_metadata_path %></li>
+          <li><%= link_to "Refile", refile_path %></li>
+        </ul>
+      </nav>
       <div class="nypl-full-width-wrapper app-content">
         <%= yield %>
       <div>

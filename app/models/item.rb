@@ -3,4 +3,13 @@ class Item
 
   def initialize
   end
+  
+  def update_metadata
+  end
+  
+  def refile
+  end
+  
+  def transfer_to(bib_id)
+  end
 end
