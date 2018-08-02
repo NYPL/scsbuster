@@ -11,6 +11,22 @@ An admin interface for ReCap/SCSB written in ruby on rails. Based on [NYPL/nypl-
 
 TODO: Setup and environment configuration, plus instructions on how to run locally.
 
+### Getting Credentials and Environment Viriables
+Please get all the necessary credentials and environment variables from NYPL before you run this application. You can find all the variables you need in `.env.example`. Once you get them, create a `.env` file in the root folder, copy the content from `.env.example` but fill in the real values respectively. See the next section to get more information about OAuth credentials.
+
+### OAuth Configuration
+The app is configured to use `isso.nypl.org` for OAuth authentication. You will need to pass in the correct `CLIENT_SECRET` as an environment variable for the authentication to work correctly. You can look up the secret in the parameter store; the clientID is `platform_admin`. Set the environment variable `CLIENT_SECRET` to the client secret when running the app, as set out below.
+
+In order to use the SSO authentication your browser needs to talk to your app on an `nypl.org` address (as otherwise isso.nypl.org will not authenticate it — let's use `local.nypl.org` as an example) on port `80` (as isso.nypl.org will always redirect to port 80). To make `local.nypl.org` a local alias for your computer (on a Linux, Mac or other \*nix OS) you need to add the following line to your `/etc/hosts` file:
+
+```
+127.0.0.1 local.nypl.org
+```
+
+You only need to do that once (well, maybe again if you upgrade your OS — that _might_ update your `hosts` file).
+
+Also the callback URI's port needs to be registered to `isso.nypl.org` before so we can use it. Now port `3001` has been registered.
+
 ## Git Workflow & Deployment
 
 Our branches (in order of stability are):
@@ -20,6 +36,7 @@ Our branches (in order of stability are):
 | master      | none        | none            |
 | development | development | aws-sandbox     |
 | production  | production  | aws-digital-dev |
+
 
 ### Cutting A Feature Branch
 
