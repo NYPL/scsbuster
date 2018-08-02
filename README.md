@@ -7,9 +7,39 @@ An admin interface for ReCap/SCSB written in ruby on rails. Based on [NYPL/nypl-
 | `development` | [![Build Status](https://travis-ci.org/NYPL/scsbuster.svg?branch=development)](https://travis-ci.org/NYPL/scsbuster) |
 | `production`  | [![Build Status](https://travis-ci.org/NYPL/scsbuster.svg?branch=production)](https://travis-ci.org/NYPL/scsbuster)  |
 
-## Running Locally
+## Installing & Running Locally
 
-TODO: Setup and environment configuration, plus instructions on how to run locally.
+This application uses [docker-compose.yml](./docker-compose.yml).
+**You can edit code as on your machine and expect it to hot-reload like you usually would.
+Forget Docker is there.**
+
+### Setup
+
+1. Clone this repo.
+1. In this app's root directory `cp ./.env.example ./.env` and fill it out. (See directions in `.env.example`)
+
+### Running
+
+`docker-compose up`
+
+### Testing (if/when we bring in RSpec)
+
+We rely on our CI service's build status, but it's important to be able to run
+tests on your localhost. This is how to run tests (from inside the web app's container)
+
+_With the stack running..._
+
+1.  `docker-compose exec webapp bash` (brings you onto the running container)
+1.  `su app`, `cd ~/scsbuster && bundle exec rspec` (in container)
+
+### Rails Console
+
+1.  `docker-compose exec webapp bash` (brings you onto the running container)
+1.  `su app`, `cd ~/scsbuster && bundle exec rails c` (in container)
+
+### Debugging With Pry
+
+TODO: Fill this out
 
 ## Git Workflow & Deployment
 
