@@ -17,3 +17,7 @@
 # This messes with how phusion/passenger-ruby wants to install gems
 .ruby-version
 .ruby-gemset
+
+# Ignore master key for decrypting credentials.
+# Locally and in production we should be using RAILS_MASTER_KEY
+/config/master.key
