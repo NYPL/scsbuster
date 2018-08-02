@@ -7,7 +7,7 @@ class ItemsController < ApplicationController
   
   def send_metadata
     barcodes = params[:barcodes]
-    puts barcodes
+    flash[:errors] = @errors.join('; ')
     flash[:notice] = "Metadata updated for #{barcodes}"
     redirect_to request.referrer 
   end
