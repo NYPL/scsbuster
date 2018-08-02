@@ -21,7 +21,7 @@ Forget Docker is there.**
 ### Running
 
 1. `docker-compose up`
-1. Go to http://localhost
+1. Go to http://localhost:3001
 
 ### Testing (if/when we bring in RSpec)
 
