@@ -25,6 +25,7 @@ COPY --chown=app:app . /home/app/scsbuster
 # https://stackoverflow.com/questions/47972479/after-ruby-update-to-2-5-0-require-bundler-setup-raise-exception
 RUN cd /home/app/scsbuster && gem update --system
 RUN cd /home/app/scsbuster && bundle install --without test development
+RUN cd /home/app/scsbuster && bundle exec rake assets:precompile
 
 # Enables ngnix+passenger
 RUN rm -f /etc/service/nginx/down
