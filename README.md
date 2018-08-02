@@ -1,10 +1,10 @@
 # SCSBuster
 An admin interface for ReCap/SCSB written in ruby on rails. Based on [NYPL/nypl-recap-admin](https://github.com/NYPL/nypl-recap-admin).
 
-| Branch        | Status                                                                                                                                   |
-|:--------------|:-----------------------------------------------------------------------------------------------------------------------------------------|
+| Branch        | Status                                                                                                               |
+|:--------------|:---------------------------------------------------------------------------------------------------------------------|
 | `master`      | [![Build Status](https://travis-ci.org/NYPL/scsbuster.svg?branch=master)](https://travis-ci.org/NYPL/scsbuster)      |
-| `development`          | [![Build Status](https://travis-ci.org/NYPL/scsbuster.svg?branch=development)](https://travis-ci.org/NYPL/scsbuster)          |
+| `development` | [![Build Status](https://travis-ci.org/NYPL/scsbuster.svg?branch=development)](https://travis-ci.org/NYPL/scsbuster) |
 | `production`  | [![Build Status](https://travis-ci.org/NYPL/scsbuster.svg?branch=production)](https://travis-ci.org/NYPL/scsbuster)  |
 
 ## Running Locally
@@ -28,7 +28,7 @@ Our branches (in order of stability are):
 
 ### Deploying
 
-TODO: [KK] Travis is not setup yet for this project. I hope to set it up in the near future. Temp instructions, but... I plan to make the following real. 
+TODO: [KK] Travis is not setup yet for this project. I hope to set it up in the near future. Temp instructions, but... I plan to make the following real.
 
 We [theoretically will] use Travis for continuous deployment.
 Merging to certain branches automatically deploys to the environment associated to
