@@ -20,7 +20,8 @@ Forget Docker is there.**
 
 ### Running
 
-`docker-compose up`
+1. `docker-compose up`
+1. Go to http://localhost
 
 ### Testing (if/when we bring in RSpec)
 
