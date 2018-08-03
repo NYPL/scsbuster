@@ -25,7 +25,7 @@ gem 'coffee-rails', '~> 4.2'
 # gem 'bcrypt', '~> 3.1.7'
 gem 'aws-sdk'
 # use nypl design toolkit for look and feel
-gem 'design-toolkit', :git => 'git@github.com:NYPL/design-toolkit.git'
+gem 'design-toolkit', :git => 'https://github.com/NYPL/design-toolkit.git'
 
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'

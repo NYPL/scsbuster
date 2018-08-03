@@ -37,6 +37,6 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 FROM production AS development
 
-run cd /home/app/scsbuster && bundle --with test development
+RUN cd /home/app/scsbuster && bundle --with test development
 # It will be linked from localhost
-run rm -rf /home/app/scsbuster/*
+RUN rm -rf /home/app/scsbuster/*
