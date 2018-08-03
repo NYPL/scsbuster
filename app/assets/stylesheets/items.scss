@@ -1,3 +1,60 @@
 // Place all the styles related to the items controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+// NYPL Toolkit
+@import 'nypl-normalize';
+@import 'toolkit';
+
+.app-header {
+  background-color: $nypl-blue-tint;
+  border-bottom: 2.5px solid $nypl-blue-dark;
+
+  .title {
+    color: $nypl-blue-dark;
+    font-weight: 400;
+  }
+}
+
+#barcodes {
+  height: 600px;
+}
+
+.nypl-submit-button-wrapper {
+  display: block;
+  margin: 25px 0 0;
+}
+
+.update-metadata-view,
+.transfer-metadata-view {
+  h2 {
+    &::before {
+      background: $nypl-gray-cool;
+      content: "";
+      display: block;
+      height: 0.25rem;
+      margin-bottom: 0.5rem;
+      width: 5rem;
+    }
+  }
+}
+
+.sidebar-navigation {
+  & > ul {
+    list-style-type: none;
+    margin: 1.5rem 0;
+
+    li {
+      margin: 1rem 0 1rem .5rem;
+
+      a {
+        color: $nypl-blue;
+      }
+    }
+  }
+}
+
+
+
+// WEBPACK FOOTER //
+// ./src/client/styles/src/client/styles/main.scss
