@@ -29,7 +29,7 @@ if [ -z "$TRAVIS_PULL_REQUEST" ] || [ "$TRAVIS_PULL_REQUEST" == "false" ] || [ "
     eval $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
 
     # Build and push
-    LOCAL_TAG_NAME=$IMAGE_NAME:$TRAVIS_BRANCH-latest
+    LOCAL_TAG_NAME=scsbuster:$TRAVIS_BRANCH-latest
     REMOTE_FULL_URL=$DOCKER_REPO_URL:$TRAVIS_BRANCH-latest
 
     docker build --target production --tag $LOCAL_TAG_NAME .
