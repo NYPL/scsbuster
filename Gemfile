@@ -23,6 +23,9 @@ gem 'coffee-rails', '~> 4.2'
 # gem 'redis', '~> 4.0'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
+gem 'aws-sdk'
+# use nypl design toolkit for look and feel
+gem 'design-toolkit', :git => 'git@github.com:NYPL/design-toolkit.git'
 
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
@@ -34,6 +37,9 @@ gem 'coffee-rails', '~> 4.2'
 gem 'bootsnap', '>= 1.1.0', require: false
 
 group :development, :test do
+  gem 'pry'
+  gem 'rubycop'
+  gem 'rspec'
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
 end
 
