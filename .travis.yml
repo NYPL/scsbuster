@@ -3,6 +3,8 @@ language: ruby
 rvm:
 - 2.5.1
 cache: bundler
+services:
+- docker
 script:
 - echo 'change me to bundle exec rspec once you get tests'
 after_success:
