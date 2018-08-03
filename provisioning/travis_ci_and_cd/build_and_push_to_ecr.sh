@@ -26,7 +26,7 @@ if [ -z "$TRAVIS_PULL_REQUEST" ] || [ "$TRAVIS_PULL_REQUEST" == "false" ] || [ "
     # Change it accordingly to your docker repo
     pip install --user awscli
     export PATH=$PATH:$HOME/.local/bin
-    eval $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
+    eval $(aws ecr get-login --no-include-email --region us-east-1)
 
     # Build and push
     LOCAL_TAG_NAME=scsbuster:$TRAVIS_BRANCH-latest
