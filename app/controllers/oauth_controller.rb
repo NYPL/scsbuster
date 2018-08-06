@@ -14,14 +14,13 @@ class OauthController < ApplicationController
         # 5. Includes the access token we just got in the header for making HTTP requests.
 
         # Set up the variables for OAuth2 Client instance and ISSO log in URL
-        client_id      = CLIENT_ID
-        client_secret  = CLIENT_SECRET
-        oauth_site     = OAUTH_SITE
-        @redirect_uri  = APP_ENV == 'development' ? DEV_OAUTH_CALLBACK_URL : OAUTH_CALLBACK_URL
-        @state         = SecureRandom.alphanumeric(24)
-        @scope         = 'login:staff'
-        @token         = {}
-        # @original_uri  = request.original_url
+        client_id        = CLIENT_ID
+        client_secret    = CLIENT_SECRET
+        oauth_site       = OAUTH_SITE
+        @redirect_uri    = APP_ENV == 'development' ? DEV_OAUTH_CALLBACK_URL : OAUTH_CALLBACK_URL
+        @state           = SecureRandom.alphanumeric(24)
+        @scope           = 'login:staff'
+        # @original_url = request.original_url
 
         # Construct the OAuth2 client instance
         @client = OAuth2::Client.new(
@@ -32,39 +31,37 @@ class OauthController < ApplicationController
     end
 
     def login
-        # TODO: Do we have ISSO log in cookies? Should we have one?
         # TODO: Check the URL link pattern to see if it matches the pattern /auth/provider or /callback
         # If no, check the log in status. If not, start OAuth authentication process
 
-        puts @token
-        puts 'testsssss'
 
-        if @token === {}
+        # puts @original_url
+
+        if !session[:access_token]
              # Set the authorize URL with required parameters, client ID, client secret, redirect URI, state, and scope
             isso_url = @client.auth_code.authorize_url(:redirect_uri => @redirect_uri) + '&state=' + @state + '&scope=' + @scope
 
             # Redirect to the authorize URL
             redirect_to isso_url
         end
+
     end
 
     def callback
         puts 'callback!!'
 
         # Get the access token and other params with the authorization code, params[:code]
-        @token = @client.auth_code.get_token(params[:code], :redirect_uri => @redirect_uri)
+        token = @client.auth_code.get_token(params[:code], :redirect_uri => @redirect_uri)
+        session[:access_token] = token.token
+        session[:refresh_token] = token.refresh_token
 
-        puts @token.token
-        puts @token.expires_in
-        puts @token.refresh_token
-        puts @token.options
-        puts @token.params
+        puts session[:access_token]
+        puts session[:refresh_token]
 
         # Now we can put "Authorization: bearer token.token" in the header when making an HTTP request
         # TODO: we need an authorization to check if the user is on the white list of the scsbuster
 
-        # redirect_to @original_uri
-        # redirect_to request.original_url
+        redirect_to '/'
     end
 
     def refresh_oauth_token
