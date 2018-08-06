@@ -10,4 +10,4 @@ services:
     volumes:
       - '.:/home/app/scsbuster'
     ports:
-      - '80:80'
+      - '3001:80'

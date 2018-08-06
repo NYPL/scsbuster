@@ -12,18 +12,24 @@
   <body>
     <div id="scsbuster">
       <header class="app-header">
-        <h1 class="title">SCSBuster</h1>
+        <div class="nypl-full-width-wrapper">
+          <h1 class="title">SCSBuster</h1>
+        </div>
       </header>
-      <nav class="">
-        <ul>
-          <li><%= link_to "Update Metadata", update_metadata_path %></li>
-          <li><%= link_to "Transfer Barcode & Update Metadata", transfer_metadata_path %></li>
-          <li><%= link_to "Refile", refile_path %></li>
-        </ul>
-      </nav>
       <div class="nypl-full-width-wrapper app-content">
-        <%= yield %>
-      <div>
+        <div class="nypl-row">
+          <nav class="nypl-column-one-quarter sidebar-navigation" id="sidebar-navigation">
+            <ul>
+              <li><%= link_to "Update Metadata", update_metadata_path %></li>
+              <li><%= link_to "Transfer Barcode & Update Metadata", transfer_metadata_path %></li>
+              <li><%= link_to "Refile", refile_path %></li>
+            </ul>
+          </nav>
+          <main class="nypl-column-three-quarters">
+            <%= yield %>
+          </main>
+        </div>
+      </div>
     </div>
   </body>
 </html>

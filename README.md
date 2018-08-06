@@ -5,6 +5,7 @@ An admin interface for ReCap/SCSB written in ruby on rails. Based on [NYPL/nypl-
 |:--------------|:---------------------------------------------------------------------------------------------------------------------|
 | `master`      | [![Build Status](https://travis-ci.org/NYPL/scsbuster.svg?branch=master)](https://travis-ci.org/NYPL/scsbuster)      |
 | `development` | [![Build Status](https://travis-ci.org/NYPL/scsbuster.svg?branch=development)](https://travis-ci.org/NYPL/scsbuster) |
+| `qa`          | [![Build Status](https://travis-ci.org/NYPL/scsbuster.svg?branch=qa)](https://travis-ci.org/NYPL/scsbuster)          |
 | `production`  | [![Build Status](https://travis-ci.org/NYPL/scsbuster.svg?branch=production)](https://travis-ci.org/NYPL/scsbuster)  |
 
 ## Installing & Running Locally
@@ -21,7 +22,7 @@ Forget Docker is there.**
 ### Running
 
 1. `docker-compose up`
-1. Go to http://localhost
+1. Go to http://localhost:3001
 
 ### Testing (if/when we bring in RSpec)
 
