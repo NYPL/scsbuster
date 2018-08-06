@@ -58,5 +58,6 @@ class OauthController < ApplicationController
     end
 
     def refresh_oauth_token
+        #TODO: Request to refresh the token
     end
 end
