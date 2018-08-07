@@ -39,9 +39,6 @@ gem 'bootsnap', '>= 1.1.0', require: false
 # Use OAuth2 for OAuth authentication
 gem 'oauth2'
 
-# Use Dotenv Rails for reading env variables
-gem 'dotenv-rails'
-
 group :development, :test do
   gem 'pry'
   gem 'rubycop'
