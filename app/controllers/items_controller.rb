@@ -11,11 +11,10 @@ class ItemsController < OauthController
     # TODO: inherite the method to check log in status, if not logged in, redirect to /login,
     # If the response is the access token expired, redirect the user to /refresh_access_token
 
-
     barcodes = params[:barcodes]
     puts barcodes
     flash[:notice] = "Metadata updated for #{barcodes}"
-    redirect_to request.referrer 
+    redirect_to request.referrer
   end
   
   def transfer_metadata

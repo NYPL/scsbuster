@@ -43,7 +43,7 @@ _With the stack running..._
 
 TODO: Fill this out
 
-### Getting Credentials and Environment Viriables
+### Getting Credentials and Environment Variables
 Please get all the necessary credentials and environment variables from NYPL before you run this application. You can find all the variables you need in `.env.example`. Once you get them, create a `.env` file in the root folder, copy the content from `.env.example` but fill in the real values respectively. See the next section to get more information about OAuth credentials.
 
 ### OAuth Configuration
