@@ -14,12 +14,12 @@ class OauthController < ApplicationController
         # 5. Includes the access token we just got in the header for making HTTP requests.
 
         # Set up the variables for OAuth2 Client instance and ISSO log in URL
-        client_id        = CLIENT_ID
-        client_secret    = CLIENT_SECRET
-        oauth_site       = OAUTH_SITE
-        @redirect_uri    = APP_ENV == 'development' ? DEV_OAUTH_CALLBACK_URL : OAUTH_CALLBACK_URL
-        @state           = SecureRandom.alphanumeric(24)
-        @scope           = 'login:staff'
+        client_id      = CLIENT_ID
+        client_secret  = CLIENT_SECRET
+        oauth_site     = OAUTH_SITE
+        @redirect_uri  = OAUTH_CALLBACK_URL
+        @state         = SecureRandom.alphanumeric(24)
+        @scope         = 'login:staff'
 
         # Construct the OAuth2 client instance
         @client = OAuth2::Client.new(

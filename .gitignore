@@ -30,6 +30,7 @@
 /public/assets
 .byebug_history
 .env
+.env.production
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
