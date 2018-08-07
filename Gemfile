@@ -36,6 +36,9 @@ gem 'design-toolkit', :git => 'https://github.com/NYPL/design-toolkit.git'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false
 
+# Use OAuth2 for OAuth authentication
+gem 'oauth2'
+
 group :development, :test do
   gem 'pry'
   gem 'rubycop'

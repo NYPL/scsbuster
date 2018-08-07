@@ -18,6 +18,7 @@ Forget Docker is there.**
 
 1. Clone this repo.
 1. In this app's root directory `cp ./.env.example ./.env` and fill it out. (See directions in `.env.example`)
+1. Add the following to `/etc/hosts`: `127.0.0.1 local.nypl.org`.
 
 ### Running
 
@@ -53,6 +54,7 @@ Our branches (in order of stability are):
 | development | development | aws-sandbox     |
 | production  | production  | aws-digital-dev |
 
+
 ### Cutting A Feature Branch
 
 1. Feature branches are cut from `master`.
@@ -66,7 +68,7 @@ We [theoretically will] use Travis for continuous deployment.
 Merging to certain branches automatically deploys to the environment associated to
 that branch.
 
-Merging `master` => `development` automatically deploys to the development environment. (after tests pass).  
+Merging `master` => `development` automatically deploys to the development environment. (after tests pass).
 Merging `development` => `production` automatically deploys to the production environment. (after tests pass).
 
 For insight into how CD works look at [.travis.yml](./.travis.yml) and the
