@@ -17,7 +17,7 @@ class OauthController < ApplicationController
         client_id      = CLIENT_ID
         client_secret  = CLIENT_SECRET
         oauth_site     = OAUTH_SITE
-        @redirect_uri  = APP_ENV == 'development' ? DEV_OAUTH_CALLBACK_URL : OAUTH_CALLBACK_URL
+        @redirect_uri  = OAUTH_CALLBACK_URL
         @state         = SecureRandom.alphanumeric(24)
         @scope         = 'login:staff'
 
