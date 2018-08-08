@@ -1,6 +1,7 @@
 class Item
   extend ActiveModel::Naming
-
+  attr_accessor :year, :month
+  
   def initialize
   end
   

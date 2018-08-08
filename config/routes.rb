@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   get "transfer_metadata", controller: 'items', action: 'transfer_metadata'
   get "update_metadata", controller: 'items', action: 'update_metadata'
   post "send_metadata", controller: 'items', action: 'send_metadata'
+  post "send_transfer_metadata", controller: 'items', action: 'send_transfer_metadata'
   root controller: 'items', :action => 'update_metadata'
 end
 
