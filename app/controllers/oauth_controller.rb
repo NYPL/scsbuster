@@ -20,8 +20,12 @@ class OauthController < ApplicationController
 
     # Only process OAuth authentication if the access token is not available or the user hit '/login' directly
     if !session[:access_token] || request.path == '/login'
+      # Create a random alphanumeric string as the value of state
+      # we will put this string in session and use it in callback action to make sure the redirect came from login action
+      session[:state] = SecureRandom.alphanumeric(24)
+
       # Set the authorize URL with required parameters, client ID, client secret, redirect URI, state, and scope
-      isso_url = OAUTH_CLIENT.auth_code.authorize_url(:redirect_uri => OAUTH_CALLBACK_URL) + '&state=' + SecureRandom.alphanumeric(24) + '&scope=' + OAUTH_SCOPE
+      isso_url = OAUTH_CLIENT.auth_code.authorize_url(:redirect_uri => OAUTH_CALLBACK_URL) + '&state=' + session[:state] + '&scope=' + OAUTH_SCOPE
 
       # Redirect to the authorize URL
       redirect_to isso_url
@@ -29,8 +33,9 @@ class OauthController < ApplicationController
   end
 
   def callback
-    # Only try to get access token if we have proper parameters
-    if !params[:state] || !params[:code]
+    # Only try to get access token if we have proper parameters,
+    # state has to be the same value as we got from login action, and we must have code
+    if params[:state] != session[:state] || !params[:code]
       redirect_to '/'
     else
       # Catch the error and proceed to redirenct to '/' if we fail to get the access token
@@ -52,5 +57,4 @@ class OauthController < ApplicationController
   def refresh_oauth_token
     #TODO: Request to refresh the token
   end
-
 end
