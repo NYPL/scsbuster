@@ -23,9 +23,8 @@ gem 'coffee-rails', '~> 4.2'
 # gem 'redis', '~> 4.0'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
+gem 'aws-sdk-sqs', '~> 1.3'
 # use nypl design toolkit for look and feel
-gem 'aws-sdk'
-gem 'dotenv-rails', groups: [:development, :test]
 gem 'design-toolkit', :git => 'https://github.com/NYPL/design-toolkit.git'
 
 # Use ActiveStorage variant
@@ -37,7 +36,8 @@ gem 'design-toolkit', :git => 'https://github.com/NYPL/design-toolkit.git'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false
 
-gem 'bootstrap-datepicker-rails'
+# Use OAuth2 for OAuth authentication
+gem 'oauth2'
 
 group :development, :test do
   gem 'pry'

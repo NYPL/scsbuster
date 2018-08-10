@@ -5,6 +5,7 @@ An admin interface for ReCap/SCSB written in ruby on rails. Based on [NYPL/nypl-
 |:--------------|:---------------------------------------------------------------------------------------------------------------------|
 | `master`      | [![Build Status](https://travis-ci.org/NYPL/scsbuster.svg?branch=master)](https://travis-ci.org/NYPL/scsbuster)      |
 | `development` | [![Build Status](https://travis-ci.org/NYPL/scsbuster.svg?branch=development)](https://travis-ci.org/NYPL/scsbuster) |
+| `qa`          | [![Build Status](https://travis-ci.org/NYPL/scsbuster.svg?branch=qa)](https://travis-ci.org/NYPL/scsbuster)          |
 | `production`  | [![Build Status](https://travis-ci.org/NYPL/scsbuster.svg?branch=production)](https://travis-ci.org/NYPL/scsbuster)  |
 
 ## Installing & Running Locally
@@ -17,6 +18,7 @@ Forget Docker is there.**
 
 1. Clone this repo.
 1. In this app's root directory `cp ./.env.example ./.env` and fill it out. (See directions in `.env.example`)
+1. Add the following to `/etc/hosts`: `127.0.0.1 local.nypl.org`.
 
 ### Running
 
@@ -52,6 +54,7 @@ Our branches (in order of stability are):
 | development | development | aws-sandbox     |
 | production  | production  | aws-digital-dev |
 
+
 ### Cutting A Feature Branch
 
 1. Feature branches are cut from `master`.
@@ -59,13 +62,7 @@ Our branches (in order of stability are):
 
 ### Deploying
 
-TODO: [KK] Travis is not setup yet for this project. I hope to set it up in the near future. Temp instructions, but... I plan to make the following real.
-
-We [theoretically will] use Travis for continuous deployment.
-Merging to certain branches automatically deploys to the environment associated to
-that branch.
-
-Merging `master` => `development` automatically deploys to the development environment. (after tests pass).  
+Merging `master` => `development` automatically deploys to the development environment. (after tests pass).
 Merging `development` => `production` automatically deploys to the production environment. (after tests pass).
 
 For insight into how CD works look at [.travis.yml](./.travis.yml) and the

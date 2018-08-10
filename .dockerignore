@@ -13,6 +13,7 @@
 
 # Let's not bake secrets into our Docker images
 .env
+.env.production
 
 # This messes with how phusion/passenger-ruby wants to install gems
 .ruby-version
