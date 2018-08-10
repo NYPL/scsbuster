@@ -69,15 +69,10 @@ class OauthController < ApplicationController
 
   # Refresh the access token once it is expired. It then reassign the new initialized ACCESS_TOKEN
   # to the class variable :token
-  #
-  # @param [String] previous_url previous page's URL we need to redirect back to
-  def refresh_access_token(previous_url = '/')
+  def refresh_access_token
     self.class.token = self.class.token.refresh!
 
     session[:access_token] = self.class.token.token
     session[:refresh_token] = self.class.token.refresh_token
-
-    # Redirect to the previous address
-    redirect_to previous_url
   end
 end
