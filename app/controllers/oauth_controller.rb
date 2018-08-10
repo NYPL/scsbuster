@@ -14,6 +14,13 @@ class OauthController < ApplicationController
   OAUTH_CLIENT = OAuth2::Client.new(CLIENT_ID, CLIENT_SECRET, site: OAUTH_SITE)
   OAUTH_SCOPE  = 'login:staff'
 
+  class << self
+    # token is the initalized ACCESS_TOKEN class after successfully called OAUTH_CLIENT.auth_code.get_token
+    # in callback method
+    attr_accessor :token
+  end
+
+  # Redirect the user to NYPL's SSO log in page
   def login
     # If the user hit '/login' to get to the action, do not redirect them back to '/login' again after OAuth
     session[:original_url] = request.path == '/login' ? '/' : request.path
@@ -32,6 +39,8 @@ class OauthController < ApplicationController
     end
   end
 
+  # After back from NYPL's SSO log in page, use the authentication code to get access token
+  # It then assigns the received initialized ACCESS_TOKEN to the class variable :token
   def callback
     # Only try to get access token if we have proper parameters,
     # state has to be the same value as we got from login action, and we must have code
@@ -40,21 +49,35 @@ class OauthController < ApplicationController
     else
       # Catch the error and proceed to redirenct to '/' if we fail to get the access token
       begin
-        # Get the access token and other params with the authorization code, params[:code]
-        token = OAUTH_CLIENT.auth_code.get_token(params[:code], :redirect_uri => OAUTH_CALLBACK_URL)
-        session[:access_token] = token.token
-        session[:refresh_token] = token.refresh_token
+        # Get the access token and initialize it with ACCESS_TOKEN class
+        self.class.token = OAUTH_CLIENT.auth_code.get_token(params[:code], :redirect_uri => OAUTH_CALLBACK_URL)
+
+        session[:access_token] = self.class.token.token
+        session[:refresh_token] = self.class.token.refresh_token
 
         # Now we can put "Authorization: bearer #{session[:access_token]}" in the header when making an HTTP request
+        # Or, we can use self.class.token.get self.class.token.post to make requests
+
         # TODO: we need an authorization to check if the user is on the white list of the scsbuster
         redirect_to session[:original_url]
       rescue
+        puts 'Failed to get access token.'
         redirect_to '/'
       end
     end
   end
 
-  def refresh_oauth_token
-    #TODO: Request to refresh the token
+  # Refresh the access token once it is expired. It then reassign the new initialized ACCESS_TOKEN
+  # to the class variable :token
+  #
+  # @param [String] previous_url previous page's URL we need to redirect back to
+  def refresh_access_token(previous_url = '/')
+    self.class.token = self.class.token.refresh!
+
+    session[:access_token] = self.class.token.token
+    session[:refresh_token] = self.class.token.refresh_token
+
+    # Redirect to the previous address
+    redirect_to previous_url
   end
 end
