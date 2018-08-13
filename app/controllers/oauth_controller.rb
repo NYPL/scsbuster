@@ -11,7 +11,7 @@ class OauthController < ApplicationController
   # 4. Get the acceess token with the authorization code by requesting to the access token URL of ISSO.
   # And redirect back to the redirect URI again.
   # 5. Includes the access token we just got in the header for making HTTP requests.
-  OAUTH_CLIENT = OAuth2::Client.new(CLIENT_ID, CLIENT_SECRET, site: OAUTH_SITE)
+  OAUTH_CLIENT = OAuth2::Client.new(ENV['CLIENT_ID'], ENV['CLIENT_SECRET'], site: ENV['OAUTH_SITE'])
   OAUTH_SCOPE  = 'login:staff'
 
   def login
@@ -25,7 +25,7 @@ class OauthController < ApplicationController
       session[:state] = SecureRandom.alphanumeric(24)
 
       # Set the authorize URL with required parameters, client ID, client secret, redirect URI, state, and scope
-      isso_url = OAUTH_CLIENT.auth_code.authorize_url(:redirect_uri => OAUTH_CALLBACK_URL) + '&state=' + session[:state] + '&scope=' + OAUTH_SCOPE
+      isso_url = OAUTH_CLIENT.auth_code.authorize_url(:redirect_uri => ENV['OAUTH_CALLBACK_URL']) + '&state=' + session[:state] + '&scope=' + OAUTH_SCOPE
 
       # Redirect to the authorize URL
       redirect_to isso_url
@@ -41,7 +41,7 @@ class OauthController < ApplicationController
       # Catch the error and proceed to redirenct to '/' if we fail to get the access token
       begin
         # Get the access token and other params with the authorization code, params[:code]
-        token = OAUTH_CLIENT.auth_code.get_token(params[:code], :redirect_uri => OAUTH_CALLBACK_URL)
+        token = OAUTH_CLIENT.auth_code.get_token(params[:code], :redirect_uri => ENV['OAUTH_CALLBACK_URL'])
         session[:access_token] = token.token
         session[:refresh_token] = token.refresh_token
 
