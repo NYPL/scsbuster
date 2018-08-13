@@ -11,7 +11,7 @@ class OauthController < ApplicationController
   # 4. Get the acceess token with the authorization code by requesting to the access token URL of ISSO.
   # And redirect back to the redirect URI again.
   # 5. Includes the access token we just got in the header for making HTTP requests.
-  OAUTH_CLIENT = OAuth2::Client.new(CLIENT_ID, CLIENT_SECRET, site: OAUTH_SITE)
+  OAUTH_CLIENT = OAuth2::Client.new(ENV['CLIENT_ID'], ENV['CLIENT_SECRET'], site: ENV['OAUTH_SITE'])
   OAUTH_SCOPE  = 'login:staff'
 
   class << self
@@ -32,7 +32,7 @@ class OauthController < ApplicationController
       session[:state] = SecureRandom.alphanumeric(24)
 
       # Set the authorize URL with required parameters, client ID, client secret, redirect URI, state, and scope
-      isso_url = OAUTH_CLIENT.auth_code.authorize_url(:redirect_uri => OAUTH_CALLBACK_URL) + '&state=' + session[:state] + '&scope=' + OAUTH_SCOPE
+      isso_url = OAUTH_CLIENT.auth_code.authorize_url(:redirect_uri => ENV['OAUTH_CALLBACK_URL']) + '&state=' + session[:state] + '&scope=' + OAUTH_SCOPE
 
       # Redirect to the authorize URL
       redirect_to isso_url
@@ -50,8 +50,7 @@ class OauthController < ApplicationController
       # Catch the error and proceed to redirenct to '/' if we fail to get the access token
       begin
         # Get the access token and initialize it with ACCESS_TOKEN class
-        self.class.token = OAUTH_CLIENT.auth_code.get_token(params[:code], :redirect_uri => OAUTH_CALLBACK_URL)
-
+        self.class.token = OAUTH_CLIENT.auth_code.get_token(params[:code], :redirect_uri => ENV['OAUTH_CALLBACK_URL'])
         session[:access_token] = self.class.token.token
         session[:refresh_token] = self.class.token.refresh_token
 
@@ -61,7 +60,7 @@ class OauthController < ApplicationController
         # TODO: we need an authorization to check if the user is on the white list of the scsbuster
         redirect_to session[:original_url]
       rescue
-        puts 'Failed to get access token.'
+        Rails.logger.debug('Failed to get access token.')
         redirect_to '/'
       end
     end
@@ -70,8 +69,10 @@ class OauthController < ApplicationController
   # Refresh the access token once it is expired. It then reassign the new initialized ACCESS_TOKEN
   # to the class variable :token
   #
-  # @param [String] previous_url the previous URL that we need to redirect back after getting the new token
+  # @param [String] previous_url the previous URL that we need to redirect back after getting the new access token
   def refresh_access_token(previous_url = '/')
+    Rails.logger.debug('Going to refresh access token.')
+
     begin
       self.class.token = self.class.token.refresh!
 
@@ -80,6 +81,7 @@ class OauthController < ApplicationController
 
       redirect_to previous_url
     rescue
+      Rails.logger.debug('Falied to refresh access token.')
       redirect_to '/login'
     end
   end
