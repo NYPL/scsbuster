@@ -66,6 +66,8 @@ class OauthController < ApplicationController
     end
   end
 
+  protected
+
   # Refresh the access token once it is expired. It then reassign the new initialized ACCESS_TOKEN
   # to the class variable :token
   #
