@@ -87,6 +87,7 @@ class OauthController < ApplicationController
 
       session[:access_token] = self.class.token.token
       session[:refresh_token] = self.class.token.refresh_token
+      session[:access_token_expires_at] = self.class.token.expires_at
 
       redirect_to previous_url
     rescue
