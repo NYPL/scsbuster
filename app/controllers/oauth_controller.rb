@@ -21,14 +21,14 @@ class OauthController < ApplicationController
   end
 
   # Redirect the user to NYPL's SSO log in page
-  def login
-    # If the user hit '/login' to get to the action, do not redirect them back to '/login' again after OAuth
-    session[:original_url] = request.path == login_path ? root_path : request.path
+  def authenticate
+    # If the user hit '/authenticate' to get to the action, do not redirect them back to '/authenticate' again after OAuth
+    session[:original_url] = request.path == authenticate_path ? root_path : request.path
 
-    # Only process OAuth authentication if the access token is not available or the user hit '/login' directly
-    if !session[:access_token] || request.path == login_path
+    # Only process OAuth authentication if the access token is not available or the user hit '/authenticate' directly
+    if !session[:access_token] || request.path == authenticate_path
       # Create a random alphanumeric string as the value of state
-      # we will put this string in session and use it in callback action to make sure the redirect came from login action
+      # we will put this string in session and use it in callback action to make sure the redirect came from authenticate action
       session[:state] = SecureRandom.alphanumeric(24)
 
       # Set the authorize URL with required parameters, client ID, client secret, redirect URI, state, and scope
@@ -43,7 +43,7 @@ class OauthController < ApplicationController
   # It then assigns the received initialized ACCESS_TOKEN to the class variable :token
   def callback
     # Only try to get access token if we have proper parameters,
-    # state has to be the same value as we got from login action, and we must have code
+    # state has to be the same value as we got from authenticate action, and we must have code
     if params[:state] != session[:state] || !params[:code]
       redirect_to root_path
     else
@@ -84,7 +84,7 @@ class OauthController < ApplicationController
       redirect_to previous_url
     rescue
       Rails.logger.debug('Falied to refresh access token.')
-      redirect_to login_path
+      redirect_to authenticate_path
     end
   end
 end
