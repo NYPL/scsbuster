@@ -45,7 +45,7 @@ class OauthController < ApplicationController
     # Only try to get access token if we have proper parameters,
     # state has to be the same value as we got from login action, and we must have code
     if params[:state] != session[:state] || !params[:code]
-      redirect_to '/'
+      redirect_to root_path
     else
       # Catch the error and proceed to redirenct to '/' if we fail to get the access token
       begin
@@ -61,7 +61,7 @@ class OauthController < ApplicationController
         redirect_to session[:original_url]
       rescue
         Rails.logger.debug('Failed to get access token.')
-        redirect_to '/'
+        redirect_to root_path
       end
     end
   end
@@ -72,7 +72,7 @@ class OauthController < ApplicationController
   # to the class variable :token
   #
   # @param [String] previous_url the previous URL that we need to redirect back after getting the new access token
-  def refresh_access_token(previous_url = '/')
+  def refresh_access_token(previous_url = root_path)
     Rails.logger.debug('Going to refresh access token.')
 
     begin
@@ -84,7 +84,7 @@ class OauthController < ApplicationController
       redirect_to previous_url
     rescue
       Rails.logger.debug('Falied to refresh access token.')
-      redirect_to '/login'
+      redirect_to login_path
     end
   end
 end
