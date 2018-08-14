@@ -36,6 +36,12 @@ class OauthController < ApplicationController
 
       # Redirect to the authorize URL
       redirect_to isso_url
+    else
+      # If access token exists, check to see whether or not it is expired
+      if session[:access_token_expires_at] && session[:access_token_expires_at] <= Time.now.to_i
+        # Refresh access token if it is expired
+        self.refresh_access_token(session[:original_url])
+      end
     end
   end
 
@@ -53,6 +59,7 @@ class OauthController < ApplicationController
         self.class.token = OAUTH_CLIENT.auth_code.get_token(params[:code], :redirect_uri => ENV['OAUTH_CALLBACK_URL'])
         session[:access_token] = self.class.token.token
         session[:refresh_token] = self.class.token.refresh_token
+        session[:access_token_expires_at] = self.class.token.expires_at
 
         # Now we can put "Authorization: bearer #{session[:access_token]}" in the header when making an HTTP request
         # Or, we can use self.class.token.get self.class.token.post to make requests
@@ -84,6 +91,7 @@ class OauthController < ApplicationController
       redirect_to previous_url
     rescue
       Rails.logger.debug('Falied to refresh access token.')
+
       redirect_to authenticate_path
     end
   end
