@@ -41,7 +41,7 @@ class RefileRequest
     require 'net/http'
     require 'uri'
     self.bearer     = self.assign_bearer
-    date_start      = Date.today - 1 if date_start.blank?
+    date_start      = Date.today - 10000 if date_start.blank?
     date_end        = Date.today if date_end.blank?
     success         = 'false' if success.blank? # I'm not 100% sure this is really necessary. We may always just want it to be false. 
     this_start = date_start.strftime('%Y-%m-%d') + 'T00:00:00-00:00'

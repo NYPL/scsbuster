@@ -26,7 +26,7 @@
       </div>
       <br/>
       <div class="nypl-text-area-with-label">
-        <%= check_box_tag(:protect_cgd, true, false) %> Protect CGD
+        <%= check_box_tag(:protect_cgd, true, @protect_cgd) %> Protect CGD
         <span class="nypl-field-status" id="barcodes-status" aria-live="assertive" aria-atomic="true">Check this box to preserve the item's current Collection Group Designation in SCSB.</span>
       </div>
       <div class="nypl-submit-button-wrapper"><%= submit_tag 'Submit', class: "nypl-primary-button" %></div>

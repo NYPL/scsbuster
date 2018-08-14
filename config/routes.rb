@@ -9,4 +9,3 @@ Rails.application.routes.draw do
   post "send_transfer_metadata", controller: 'items', action: 'send_transfer_metadata'
   root controller: 'items', :action => 'update_metadata'
 end
-
