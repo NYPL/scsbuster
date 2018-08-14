@@ -23,10 +23,10 @@ class OauthController < ApplicationController
   # Redirect the user to NYPL's SSO log in page
   def login
     # If the user hit '/login' to get to the action, do not redirect them back to '/login' again after OAuth
-    session[:original_url] = request.path == '/login' ? '/' : request.path
+    session[:original_url] = request.path == login_path ? root_path : request.path
 
     # Only process OAuth authentication if the access token is not available or the user hit '/login' directly
-    if !session[:access_token] || request.path == '/login'
+    if !session[:access_token] || request.path == login_path
       # Create a random alphanumeric string as the value of state
       # we will put this string in session and use it in callback action to make sure the redirect came from login action
       session[:state] = SecureRandom.alphanumeric(24)
