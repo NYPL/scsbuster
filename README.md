@@ -18,7 +18,7 @@ Forget Docker is there.**
 
 1. Clone this repo.
 1. In this app's root directory `cp ./.env.example ./.env` and fill it out. (See directions in `.env.example`)
-1. Add the following to `/etc/hosts`: `127.0.0.1 local.nypl.org`.
+1. Add the following to `/etc/hosts`: `127.0.0.1 local.nypl.org`. This makes an alias as a public URL for our local IP. NYPL’s SSO service only accepts public URLs as the redirect URI. So for running locally, we need to assign a public address to our local IP.
 
 ### Running
 
