@@ -5,7 +5,6 @@ class ItemsController < OauthController
   end
   
   def update_metadata
-    # TODO: if the response is the access token expired, redirect the user to /refresh_access_token
   end
 
   def send_metadata
