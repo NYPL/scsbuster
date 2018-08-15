@@ -24,7 +24,6 @@ class OauthController < ApplicationController
   def authenticate
     # If the user hit '/authenticate' to get to the action, do not redirect them back to '/authenticate' again after OAuth
     session[:original_url] = request.path == authenticate_path ? root_path : request.path
-
     # Only process OAuth authentication if the access token is not available or the user hit '/authenticate' directly
     if !session[:access_token] || request.path == authenticate_path
       # Create a random alphanumeric string as the value of state

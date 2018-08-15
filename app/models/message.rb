@@ -4,7 +4,7 @@ class Message
   extend ActiveModel::Naming
   include ActiveModel::Validations
   include ActiveModel::Model
-  attr_accessor :barcodes, :user_email, :protect_cgd, :action, :bib_record_number
+  attr_accessor :barcodes, :user_email, :protect_cgd, :action, :bib_record_number, :user_email
   
   validate :barcode_format, :bib_record_number_format
 
@@ -36,12 +36,12 @@ class Message
     entries = [
         {
           id: self.barcodes.first,
-          message_body: "{
-            \"barcodes\": #{self.barcodes},
-            \"protectCGD\": #{self.protect_cgd},
-            \"action\": \"#{self.action}\",
-            \"email\": \"kristopherkelly@nypl.org\"
-            }"
+          message_body: JSON.generate({
+            barcodes: self.barcodes,
+            protectCGD: self.protect_cgd,
+            action: self.action,
+            email: self.user_email
+          })
         }
       ]
     
@@ -62,13 +62,13 @@ class Message
     entries = [
         {
           id: self.barcodes.first,
-          message_body: "{
-            \"barcodes\": #{self.barcodes},
-            \"protectCGD\": #{self.protect_cgd},
-            \"action\": \"#{self.action}\",
-            \"bibRecordNumber\": \"#{self.bib_record_number}\",
-            \"email\": \"kristopherkelly@nypl.org\"
-            }"
+          message_body: JSON.generate({
+            barcodes: self.barcodes,
+            protectCGD: self.protect_cgd,
+            action: self.action,
+            bibRecordNumber: self.bib_record_number,
+            email: self.user_email
+          })
         }
       ]
     
