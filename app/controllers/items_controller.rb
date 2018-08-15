@@ -16,8 +16,8 @@ class ItemsController < OauthController
   end
   
   def update_metadata
-    @barcodes = params[:barcodes] || []
-    @protect_cgd = params[:protect_cgd] || false
+    @barcodes = params[:barcodes] ||= []
+    @protect_cgd = params[:protect_cgd]
   end
 
   def send_metadata
@@ -31,7 +31,7 @@ class ItemsController < OauthController
       valid_barcodes_message.send_update_message_to_sqs
     end
     
-    protect_cgd = ( !message.valid? && message.errors.present? ) ? params[:protect_cgd] : false
+    message.protect_cgd = nil if message.errors.blank?
     
     if barcodes.blank?
       flash[:error] = "Please enter one or more barcodes."
@@ -44,13 +44,13 @@ class ItemsController < OauthController
     if message.valid_barcodes.present? && message.invalid_barcodes.blank?
       flash[:success] = "The barcode(s) have been submitted for processing."
     end
-    redirect_to action: 'update_metadata', barcodes: message.invalid_barcodes, protect_cgd: protect_cgd 
+    redirect_to action: 'update_metadata', barcodes: message.invalid_barcodes, protect_cgd: message.protect_cgd 
   end
   
   def transfer_metadata
     @barcode = params[:barcode] || []
     @bib_record_number = params[:bib_record_number] || []
-    @protect_cgd = params[:protect_cgd] || []
+    @protect_cgd = params[:protect_cgd] || false
   end
   
   def send_transfer_metadata
