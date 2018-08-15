@@ -16,8 +16,8 @@ class ItemsController < OauthController
   end
   
   def update_metadata
-    @barcodes = params[:notice].present? && params[:notice]["barcodes"].present? ? params[:notice]["barcodes"] : []
-    @protect_cgd = params[:notice].present? && params[:notice]["protect_cgd"].present? ? params[:notice]["protect_cgd"] : false
+    @barcodes = params[:barcodes] || []
+    @protect_cgd = params[:protect_cgd] || false
   end
 
   def send_metadata
@@ -27,11 +27,11 @@ class ItemsController < OauthController
     if message.valid?
       message.send_update_message_to_sqs
     elsif message.valid_barcodes.present? 
-      message.barcodes = message.valid_barcodes
-      message.send_update_message_to_sqs
+      valid_barcodes_message = Message.new(barcodes: message.valid_barcodes, protect_cgd: params[:protect_cgd], action: 'update')
+      valid_barcodes_message.send_update_message_to_sqs
     end
     
-    protect_cgd = message.errors.present? ? params[:protect_cgd] : false
+    protect_cgd = ( !message.valid? && message.errors.present? ) ? params[:protect_cgd] : false
     
     if barcodes.blank?
       flash[:error] = "Please enter one or more barcodes."
@@ -44,13 +44,13 @@ class ItemsController < OauthController
     if message.valid_barcodes.present? && message.invalid_barcodes.blank?
       flash[:success] = "The barcode(s) have been submitted for processing."
     end
-    redirect_to action: 'update_metadata', notice: { barcodes: message.invalid_barcodes, protect_cgd: protect_cgd}
+    redirect_to action: 'update_metadata', barcodes: message.invalid_barcodes, protect_cgd: protect_cgd 
   end
   
   def transfer_metadata
-    @barcode = params[:notice].present? && params[:notice]["barcode"].present? ? params[:notice]["barcode"] : []
-    @bib_record_number = params[:notice].present? && params[:notice]["bib_record_number"].present? ? params[:notice]["bib_record_number"] : []
-    @protect_cgd = params[:notice].present? && params[:notice]["protect_cgd"].present? ? params[:notice]["protect_cgd"] : []
+    @barcode = params[:barcode] || []
+    @bib_record_number = params[:bib_record_number] || []
+    @protect_cgd = params[:protect_cgd] || []
   end
   
   def send_transfer_metadata
@@ -68,7 +68,7 @@ class ItemsController < OauthController
     else
       flash[:errors] = "The system encountered an issue. Please retry your submission. If the problem persists, please contact the Digital team at scctech@nypl.org."
     end
-    redirect_to action: 'transfer_metadata', notice: { barcode: invalid_barcode, bib_record_number: invalid_bib_record_number, protect_cgd: protect_cgd}
+    redirect_to action: 'transfer_metadata', barcode: invalid_barcode, bib_record_number: invalid_bib_record_number, protect_cgd: protect_cgd 
   end
   
   private
