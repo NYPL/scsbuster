@@ -26,29 +26,25 @@ class ItemsController < OauthController
     message = Message.new(barcodes: barcodes, protect_cgd: params[:protect_cgd], action: 'update')
     if message.valid?
       message.send_update_message_to_sqs
-      invalid_barcodes = []
     elsif message.valid_barcodes.present? 
-      invalid_barcodes = message.invalid_barcodes
       message.barcodes = message.valid_barcodes
       message.send_update_message_to_sqs
-    else
-      invalid_barcodes = barcodes
     end
     
     protect_cgd = message.errors.present? ? params[:protect_cgd] : false
     
     if barcodes.blank?
       flash[:error] = "Please enter one or more barcodes."
-    elsif invalid_barcodes.present? && message.valid_barcodes.blank?
+    elsif message.invalid_barcodes.present? && message.valid_barcodes.blank?
       flash[:error] = "The barcode(s) remaining are invalid; each barcode must be 14 numerical digits in length. Separate barcodes using commas or returns (new lines)."
-    elsif invalid_barcodes.present? && message.valid_barcodes.present?
+    elsif message.invalid_barcodes.present? && message.valid_barcodes.present?
       flash[:notice] = "Some barcodes were submitted."
       flash[:error] = "The barcode(s) remaining are invalid; each barcode must be 14 numerical digits in length. Separate barcodes using commas or returns (new lines)."
     end
-    if message.valid_barcodes.present? && invalid_barcodes.blank?
+    if message.valid_barcodes.present? && message.invalid_barcodes.blank?
       flash[:success] = "The barcode(s) have been submitted for processing."
     end
-    redirect_to action: 'update_metadata', notice: { barcodes: invalid_barcodes, protect_cgd: protect_cgd}
+    redirect_to action: 'update_metadata', notice: { barcodes: message.invalid_barcodes, protect_cgd: protect_cgd}
   end
   
   def transfer_metadata
