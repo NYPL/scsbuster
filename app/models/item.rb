@@ -2,10 +2,8 @@ require 'aws-sdk-sqs'
 
 class Item
   extend ActiveModel::Naming
+  include ActiveModel::Model
   attr_accessor :year, :month
-
-  def initialize
-  end
 
   def update_metadata
     s3 = Aws::S3::Client.new(

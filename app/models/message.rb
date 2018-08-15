@@ -3,14 +3,11 @@ require 'aws-sdk-sqs'
 class Message
   extend ActiveModel::Naming
   include ActiveModel::Validations
+  include ActiveModel::Model
   attr_accessor :barcodes, :user_email, :protect_cgd, :action, :bib_record_number
   
   validate :barcode_format, :bib_record_number_format
-  
-  def initialize params = {}
-    params.each { |key, value| send "#{key}=", value }
-  end
-  
+
   def valid_barcodes
     if barcodes && barcodes.is_a?(Array)
       barcodes.map!(&:to_s) 
