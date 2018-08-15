@@ -1,5 +1,4 @@
-require 'aws-sdk-sqs'
-
+require 'sqs_client'
 class Message
   extend ActiveModel::Naming
   include ActiveModel::Validations
@@ -27,12 +26,7 @@ class Message
   end
   
   def send_update_message_to_sqs
-    sqs = Aws::SQS::Client.new(
-      region: 'us-east-1',
-      access_key_id: AWS_KEY_ID,
-      secret_access_key: AWS_SECRET
-    )
-    queue_url = SQS_QUEUE_URL
+    sqs = SqsClient.new
     entries = [
         {
           id: self.barcodes.first,
@@ -45,20 +39,11 @@ class Message
         }
       ]
     
-    resp = sqs.send_message_batch({
-      queue_url: queue_url,
-      entries: entries,
-    })
-    resp
+    sqs.send_message(entries)
   end
   
   def send_transfer_message_to_sqs
-    sqs = Aws::SQS::Client.new(
-      region: 'us-east-1',
-      access_key_id: AWS_KEY_ID,
-      secret_access_key: AWS_SECRET
-    )
-    queue_url = SQS_QUEUE_URL
+    sqs = SqsClient.new
     entries = [
         {
           id: self.barcodes.first,
@@ -71,12 +56,7 @@ class Message
           })
         }
       ]
-    
-    resp = sqs.send_message_batch({
-      queue_url: queue_url,
-      entries: entries,
-    })
-    resp
+    sqs.send_message(entries)
   end
   
   private
