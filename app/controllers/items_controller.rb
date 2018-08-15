@@ -1,5 +1,5 @@
 class ItemsController < OauthController
-  before_action :login
+  before_action :authenticate
 
   def refile
   end
