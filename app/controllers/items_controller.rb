@@ -48,9 +48,9 @@ class ItemsController < OauthController
   end
   
   def transfer_metadata
-    @barcode = params[:barcode] || []
-    @bib_record_number = params[:bib_record_number] || []
-    @protect_cgd = params[:protect_cgd] || false
+    @barcode = params[:barcode] ||= []
+    @bib_record_number = params[:bib_record_number] ||= []
+    @protect_cgd = params[:protect_cgd]
   end
   
   def send_transfer_metadata
