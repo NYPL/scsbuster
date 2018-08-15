@@ -25,7 +25,7 @@ Forget Docker is there.**
 1. `docker-compose up`
 1. Go to http://localhost:3001
 
-### Testing (if/when we bring in RSpec)
+### Testing
 
 We rely on our CI service's build status, but it's important to be able to run
 tests on your localhost. This is how to run tests (from inside the web app's container)
