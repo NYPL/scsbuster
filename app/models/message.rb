@@ -1,3 +1,5 @@
+require 'aws-sdk-sqs'
+
 class Message
   extend ActiveModel::Naming
   include ActiveModel::Validations
@@ -28,7 +30,6 @@ class Message
   end
   
   def send_update_message_to_sqs
-    require 'aws-sdk-sqs'
     sqs = Aws::SQS::Client.new(
       region: 'us-east-1',
       access_key_id: AWS_KEY_ID,
