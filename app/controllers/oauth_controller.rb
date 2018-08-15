@@ -36,12 +36,10 @@ class OauthController < ApplicationController
 
       # Redirect to the authorize URL
       redirect_to isso_url
-    else
-      # If access token exists, check to see whether or not it is expired
-      if session[:access_token_expires_at] && session[:access_token_expires_at] <= Time.now.to_i
-        # Refresh access token if it is expired
-        self.refresh_access_token(session[:original_url])
-      end
+    # If access token exists, check to see whether or not it is expired
+    elsif session[:access_token_expires_at] && session[:access_token_expires_at] <= Time.now.to_i
+      # Refresh access token if it is expired
+      self.refresh_access_token(session[:original_url])
     end
   end
 
@@ -92,7 +90,6 @@ class OauthController < ApplicationController
       redirect_to previous_url
     rescue
       Rails.logger.debug('Falied to refresh access token.')
-
       redirect_to authenticate_path
     end
   end
