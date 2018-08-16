@@ -1,17 +1,35 @@
 <h2>Update SCSB Metadata</h2>
-
+  <p>Submit up to 1000 barcodes at a time to update each barcode's metadata in SCSB. This tool updates each barcode's SCSB metadata with its Sierra bib and item record metadata. Barcodes are processed 10 minutes after submission.</p>
 <% flash.each do |key, value| %>
-  <div class="alert alert-<%= key %>"><%= value %></div>
+  <% normalized_key = key == 'notice' ? 'success' : key %>
+  <div class="nypl-form-<%= normalized_key %>">
+    <% if key == 'success' %>
+      <h2>Success!</h2>
+      <p><%= value %></p>
+    <% elsif key == 'notice' %>
+      <p><%= value %></p>
+    <% elsif key == 'error' %>
+      <div class="flash_error flash_message nypl-required-field" id="flash_error">
+        <p><%= value %></p>
+      </div>
+    <% end %>
+  </div>
 <% end %>
 
 <%= form_tag action: 'send_metadata' do -%>
   <div>
     <p>
-      <label class="required">Barcode(s)</label> Required<br/>
-      <%= text_area_tag :barcodes, nil, { class: 'required', rows: 50, cols: 75 } %><br/>
-      Please paste / enter a list of 14-digit barcodes.<br/>
-      Protect GCD<%= check_box_tag(:protect_gcd, true, false) %><br/>
-      <%= submit_tag 'Submit' %>
+      <div class="nypl-text-area-with-label">
+        <label class="required">Barcode(s)</label><span class="nypl-required-field"> Required</span>
+        <%= text_area_tag :barcodes, @barcodes.join(', '), { class: 'required', rows: 50, cols: 75 } %>
+        <span class="nypl-field-status" id="barcodes-status" aria-live="assertive" aria-atomic="true">Enter a single barcode or multiple barcodes separated by a comma or return.</span>
+      </div>
+      <br/>
+      <div class="nypl-text-area-with-label">
+        <%= check_box_tag(:protect_cgd, true, @protect_cgd) %> Protect CGD
+        <span class="nypl-field-status" id="barcodes-status" aria-live="assertive" aria-atomic="true">Check this box to preserve the item's current Collection Group Designation in SCSB.</span>
+      </div>
+      <div class="nypl-submit-button-wrapper"><%= submit_tag 'Submit', class: "nypl-primary-button" %></div>
     </p>
   </div>
 <% end -%>
