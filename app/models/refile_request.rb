@@ -9,9 +9,9 @@ class RefileRequest
   # Authorizes the request. 
   def assign_bearer
     begin
-      uri = URI.parse(API_AUTH_URL)
+      uri = URI.parse(OAUTH_TOKEN_URL)
       request = Net::HTTP::Post.new(uri)
-      request.basic_auth(API_CLIENT_ID,API_CLIENT_SECRET)
+      request.basic_auth(CLIENT_ID,CLIENT_SECRET)
       request.set_form_data(
         "grant_type" => "client_credentials"
       )
@@ -43,13 +43,12 @@ class RefileRequest
     self.bearer     = self.assign_bearer
     date_start      = Date.today - 10000 if date_start.blank?
     date_end        = Date.today if date_end.blank?
-    success         = 'false' if success.blank? # I'm not 100% sure this is really necessary. We may always just want it to be false. 
     this_start = date_start.strftime('%Y-%m-%d') + 'T00:00:00-00:00'
     this_end = date_end.strftime('%Y-%m-%d') + 'T23:59:59-00:00'
     page = 1 if page.blank?
     per_page = 25 if per_page.blank?
     offset = (page - 1) * per_page
-    request_string = "#{API_BASE_URL}/recap/refile-requests?createdDate=[#{this_start},#{this_end}]&success=#{success}&offset=#{offset}&limit=#{per_page}&includeTotalCount=true"
+    request_string = "#{API_BASE_URL}/recap/refile-errors?createdDate=[#{this_start},#{this_end}]&offset=#{offset}&limit=#{per_page}&includeTotalCount=true"
     puts request_string
     uri = URI.parse(request_string)
     request = Net::HTTP::Get.new(uri)
