@@ -1,1 +1,43 @@
-<h2>Transfer & Update Metadata Form</h2>
+<h2>Transfer Barcode & Update Metadata</h2>
+<p>Use this tool to transfer a ReCAP barcode to a completely different bib record in SCSB, but only after transferring the barcode's item record to the desired bib in Sierra. This tool also updates the submitted barcode's SCSB metadata with current Sierra bib and item record metadata. Each transfer request is processed 10 minutes after submission.</p>
+<% flash.each do |key, value| %>
+  <% normalized_key = key == 'notice' ? 'success' : key %>
+  <div class="nypl-form-<%= normalized_key %>">
+    <% if key == 'success' %>
+      <h2>Success!</h2>
+      <p><%= value %></p>
+    <% elsif key == 'notice' %>
+      <p><%= value %></p>
+    <% elsif key == 'errors' %>
+      <% value.each do |k, v| %>
+        <div class="flash_error flash_message nypl-required-field" id="flash_error">
+          <p><%= v.join("<br/>") if v.present? %></p>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>
+
+<%= form_tag action: 'send_transfer_metadata' do -%>
+  <div>
+    <p>
+      <div class="nypl-text-field-with-label">
+        <label class="required">Barcode</label><span class="nypl-required-field"> Required</span>
+        <%= text_field_tag :barcode, @barcode, { class: 'required' } %>
+        <span class="nypl-field-status" id="barcodes-status" aria-live="assertive" aria-atomic="true">Enter a single barcode.</span>
+      </div>
+      <br/>
+      <div class="nypl-text-field-with-label">
+        <label class="required">Bib Record Number</label><span class="nypl-required-field"> Required</span>
+        <%= text_field_tag :bib_record_number, @bib_record_number, { class: 'required' } %>
+        <span class="nypl-field-status" id="barcodes-status" aria-live="assertive" aria-atomic="true">Enter the above barcode's bib record number.</span>
+      </div>
+      <br/>
+      <div class="nypl-text-area-with-label">
+        <%= check_box_tag(:protect_cgd, true, @protect_cgd) %> Protect CGD
+        <span class="nypl-field-status" id="barcodes-status" aria-live="assertive" aria-atomic="true">Check this box to preserve the item's current Collection Group Designation in SCSB.</span>
+      </div>
+      <div class="nypl-submit-button-wrapper"><%= submit_tag 'Submit', class: "nypl-primary-button" %></div>
+    </p>
+  </div>
+<% end -%>
