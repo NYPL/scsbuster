@@ -7,7 +7,7 @@ class SqsClient
       secret_access_key: AWS_SECRET
     )
   end
-  
+
   def send_message(entries)
     resp = @sqs.send_message_batch({
       queue_url: SQS_QUEUE_URL,
