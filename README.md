@@ -25,7 +25,7 @@ Forget Docker is there.**
 1. `docker-compose up`
 1. Go to http://localhost:3001
 
-### Testing (if/when we bring in RSpec)
+### Testing
 
 We rely on our CI service's build status, but it's important to be able to run
 tests on your localhost. This is how to run tests (from inside the web app's container)
@@ -61,12 +61,6 @@ Our branches (in order of stability are):
 2. Once the feature branch is ready to be merged, file a pull request of the branch _into_ master.
 
 ### Deploying
-
-TODO: [KK] Travis is not setup yet for this project. I hope to set it up in the near future. Temp instructions, but... I plan to make the following real.
-
-We [theoretically will] use Travis for continuous deployment.
-Merging to certain branches automatically deploys to the environment associated to
-that branch.
 
 Merging `master` => `development` automatically deploys to the development environment. (after tests pass).
 Merging `development` => `production` automatically deploys to the production environment. (after tests pass).

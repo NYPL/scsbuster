@@ -6,5 +6,6 @@ Rails.application.routes.draw do
   get "authenticate", controller: 'oauth', action: 'authenticate'
   get "callback", controller: 'oauth', action: 'callback'
   post "send_metadata", controller: 'items', action: 'send_metadata'
+  post "send_transfer_metadata", controller: 'items', action: 'send_transfer_metadata'
   root controller: 'items', :action => 'update_metadata'
 end
