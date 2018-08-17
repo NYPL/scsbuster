@@ -1,12 +1,13 @@
+require 'json'
+require 'net/http'
+require 'uri'
+
 # Model represents NYPL refile api request, both for get and post requests.
 class RefileRequest
-  require 'json'
-  require 'net/http'
-  require 'uri'
-  
+
   attr_accessor :bearer, :page, :per_page, :success, :date_start, :date_end
-  
-  # Authorizes the request. 
+
+  # Authorizes the request.
   def assign_bearer
     begin
       uri = URI.parse(OAUTH_TOKEN_URL)
@@ -36,10 +37,8 @@ class RefileRequest
       self.bearer = nil
     end
   end
-  
+
   def get_refiles
-    require 'net/http'
-    require 'uri'
     self.bearer     = self.assign_bearer
     date_start      = Date.today - 10000 if date_start.blank?
     date_end        = Date.today if date_end.blank?
