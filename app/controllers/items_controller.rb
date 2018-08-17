@@ -2,19 +2,23 @@ class ItemsController < OauthController
   before_action :authenticate
 
   def refile
-    @refile_request = RefileRequest.new
-    # TODO: Finish this in subsequent branch.
+
     if params[:page] && params[:per_page]
       @offset = ( params[:page].to_i - 1 ) * params[:per_page].to_i
     else
       @offset = 0
     end
 
-    date_start = params[:date_start].present? ? params[:date_start] : nil
-    date_end = params[:date_end].present? ? params[:date_end] : nil
-    @refiles = get_refiles(date_start,date_end,params[:page],params[:per_page])
+    @refile_request = RefileRequest.new(
+      date_start: params[:date_start],
+      date_end: params[:date_end],
+      page: params[:page],
+      per_page: params[:per_page]
+    )
+
+    @refiles = @refile_request.get_refiles
   end
-  
+
   def update_metadata
     @barcodes = params[:barcodes] ||= []
     @protect_cgd = params[:protect_cgd]
@@ -68,16 +72,7 @@ class ItemsController < OauthController
     else
       flash[:errors] = "The system encountered an issue. Please retry your submission. If the problem persists, please contact the Digital team at scctech@nypl.org."
     end
-    redirect_to action: 'transfer_metadata', barcode: invalid_barcode, bib_record_number: invalid_bib_record_number, protect_cgd: protect_cgd 
+    redirect_to action: 'transfer_metadata', barcode: invalid_barcode, bib_record_number: invalid_bib_record_number, protect_cgd: protect_cgd
   end
-  
-  private
-  
-  def get_refiles(date_start, date_end, page, per_page)
-    @refile_request.date_start = date_start
-    @refile_request.date_end = date_end
-    @refile_request.page = page
-    @refile_request.per_page = per_page
-    @refile_request.get_refiles
-  end
+
 end
