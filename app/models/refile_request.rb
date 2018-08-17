@@ -5,7 +5,7 @@ require 'uri'
 # Model represents NYPL refile api request, both for get and post requests.
 class RefileRequest
 
-  attr_accessor :bearer, :page, :per_page, :success, :date_start, :date_end
+  attr_accessor :bearer, :page, :per_page, :date_start, :date_end
 
   # Authorizes the request.
   def assign_bearer
