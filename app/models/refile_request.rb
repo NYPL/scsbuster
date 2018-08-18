@@ -1,10 +1,14 @@
 # Model represents NYPL refile api request, both for get and post requests.
 class RefileRequest
+  extend ActiveModel::Naming
+  include ActiveModel::Validations
+  include ActiveModel::Model
   require 'json'
   require 'net/http'
   require 'uri'
+  attr_accessor :bearer, :page, :per_page, :success, :date_start, :date_end, :barcode
   
-  attr_accessor :bearer, :page, :per_page, :success, :date_start, :date_end
+  validate :barcode_format
   
   # Authorizes the request. 
   def assign_bearer
@@ -68,6 +72,51 @@ class RefileRequest
     else
       # TODO: Log this.
       {}
+    end
+  end
+  
+  def invalid_barcode
+    barcode if !barcode.match?(/^\w{20}$/)
+  end
+  
+  def post_refile
+    self.bearer     = self.assign_bearer
+    uri = URI.parse("#{API_BASE_URL}/recap/refile-requests")
+    request = Net::HTTP::Post.new(uri)
+    request.content_type = "application/json"
+    request["Accept"] = "application/json"
+    request["Authorization"] = "Bearer #{self.bearer}"
+    request.body = JSON.dump({
+      "itemBarcode" => self.barcode
+    })
+
+    req_options = {
+      use_ssl: uri.scheme == "https",
+    }
+
+    response = Net::HTTP.start(uri.hostname, uri.port, req_options) do |http|
+      http.request(request)
+    end
+
+    if response.code == "200"
+      JSON.parse(response.body)
+    else
+      # TODO: Log this.
+      {}
+    end
+  end
+  
+  private
+  
+  def barcode_format
+    if barcode.blank? 
+      errors.add(:barcode, "Please enter a barcode.")
+    end
+    if barcode.is_a?(Array)
+      errors.add(:barcode, "Please enter a single barcode.")
+    end
+    if invalid_barcode.present?
+      errors.add(:barcode, "The barcode must be up to 20 alphanumeric characters in length.")
     end
   end
 end
