@@ -40,9 +40,11 @@ _With the stack running..._
 1.  `docker-compose exec webapp bash` (brings you onto the running container)
 1.  `su app`, `cd ~/scsbuster && bundle exec rails c` (in container)
 
-### Debugging With Pry
+### Debugging With Pry Remote
 
-TODO: Fill this out
+1.  `docker-compose exec webapp bash` (brings you onto the running container)
+1.  In code, add your breakpoint with `binding.pry_remote`, hit the endpoint
+1.  `su app`, `cd ~/scsbuster && bundle exec pry-remote` (in container)
 
 ## Git Workflow & Deployment
 
