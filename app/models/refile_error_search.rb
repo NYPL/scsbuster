@@ -12,9 +12,9 @@ class RefileErrorSearch
   # Authorizes the request.
   def assign_bearer
     begin
-      uri = URI.parse(OAUTH_TOKEN_URL)
+      uri = URI.parse(ENV['OAUTH_TOKEN_URL'])
       request = Net::HTTP::Post.new(uri)
-      request.basic_auth(CLIENT_ID,CLIENT_SECRET)
+      request.basic_auth(ENV['CLIENT_ID'],ENV['CLIENT_SECRET'])
       request.set_form_data(
         "grant_type" => "client_credentials"
       )
@@ -32,10 +32,10 @@ class RefileErrorSearch
         self.bearer = JSON.parse(response.body)["access_token"]
       else
         self.bearer = nil
-        # TODO: Log this a-somewhere, plz.
+        Rails.logger.warn("Bad response getting bearer token, response code is #{response.code}")
       end
     rescue Exception => e
-      # TODO: Log this a-somewhere, plz.
+      Rails.logger.error("Error getting bearer #{e.backtrace}")
       self.bearer = nil
     end
   end
@@ -61,7 +61,7 @@ class RefileErrorSearch
     this_start = date_start.strftime('%Y-%m-%d') + 'T00:00:00-00:00'
     this_end = date_end.strftime('%Y-%m-%d') + 'T23:59:59-00:00'
     offset = (page - 1) * per_page
-    request_string = "#{API_BASE_URL}/recap/refile-errors?createdDate=[#{this_start},#{this_end}]&offset=#{offset}&limit=#{per_page}&includeTotalCount=true"
+    request_string = "#{ENV['API_BASE_URL']}/recap/refile-errors?createdDate=[#{this_start},#{this_end}]&offset=#{offset}&limit=#{per_page}&includeTotalCount=true"
     uri = URI.parse(request_string)
     request = Net::HTTP::Get.new(uri)
     request["Accept"] = "application/json"
@@ -78,7 +78,7 @@ class RefileErrorSearch
     if response.code == "200"
       JSON.parse(response.body)
     else
-      # TODO: Log this.
+      Rails.logger.warn("Error getting refiles, response code #{response.code}")
       {}
     end
   end
