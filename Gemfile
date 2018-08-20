@@ -9,6 +9,8 @@ gem 'uglifier', '>= 1.3.0'
 gem 'faraday'
 gem 'coffee-rails', '~> 4.2'
 gem 'aws-sdk-sqs', '~> 1.3'
+
+# Used in asset pipeline for styling
 gem 'design-toolkit', :git => 'https://github.com/NYPL/design-toolkit.git'
 gem 'bootsnap', '>= 1.1.0', require: false
 # See https://github.com/rails/execjs#readme for more supported runtimes
