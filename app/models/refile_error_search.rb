@@ -12,9 +12,9 @@ class RefileErrorSearch
   # Authorizes the request.
   def assign_bearer
     begin
-      uri = URI.parse(OAUTH_TOKEN_URL)
+      uri = URI.parse(ENV['OAUTH_TOKEN_URL'])
       request = Net::HTTP::Post.new(uri)
-      request.basic_auth(CLIENT_ID,CLIENT_SECRET)
+      request.basic_auth(ENV['CLIENT_ID'],ENV['CLIENT_SECRET'])
       request.set_form_data(
         "grant_type" => "client_credentials"
       )
@@ -78,7 +78,6 @@ class RefileErrorSearch
     if response.code == "200"
       JSON.parse(response.body)
     else
-      # TODO: Log this.
       {}
     end
   end
