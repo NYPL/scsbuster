@@ -10,7 +10,7 @@ class SqsClient
       )
     else
       Rails.logger.info("Rails ENV is not development. Creating client using ROLE")
-      Rails.logger.info("Client credentials at #{ENV['AWS_CONTAINER_CREDENTIALS_RELATIVE_URI'}")
+      Rails.logger.info("Client credentials at #{ENV['AWS_CONTAINER_CREDENTIALS_RELATIVE_URI']}")
       @sqs = Aws::SQS::Client.new(region: 'us-east-1')
     end
 
