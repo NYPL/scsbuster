@@ -2,8 +2,8 @@ require 'json'
 require 'net/http'
 require 'uri'
 
-# Model represents NYPL refile api request, both for get and post requests.
-class RefileRequest
+# Model represents a search for RefileErrors
+class RefileErrorSearch
   include ActiveModel::Model
 
   attr_writer :page, :per_page, :date_start,:date_end

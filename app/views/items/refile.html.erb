@@ -15,7 +15,7 @@
 
 <div>
   <% if @refiles["data"].present? %>
-    <p class='display-result-text'>Displaying <%= cardinality_of_current_results(@refile_request, @refiles) %> of <%= @refiles["totalCount"] %> errors from <%= @refile_request.date_start %> to <%= @refile_request.date_end %></p>
+    <p class='display-result-text'>Displaying <%= cardinality_of_current_results(@refile_error_search, @refiles) %> of <%= @refiles["totalCount"] %> errors from <%= @refile_error_search.date_start %> to <%= @refile_error_search.date_end %></p>
 
     <table class="result-table">
       <caption class="hidden">Refile Error Details</caption>
@@ -45,7 +45,7 @@
 
 
     <nav class="nypl-results-pagination">
-      <%= refile_pagination(@refile_request, @refiles) %>
+      <%= refile_pagination(@refile_error_search, @refiles) %>
     </nav>
   <% else %>
     <p><%= @refiles['statusCode'] %></p>

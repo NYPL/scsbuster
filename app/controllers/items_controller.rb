@@ -9,14 +9,14 @@ class ItemsController < OauthController
       @offset = 0
     end
 
-    @refile_request = RefileRequest.new(
+    @refile_error_search = RefileErrorSearch.new(
       date_start: params[:date_start],
       date_end: params[:date_end],
       page: params[:page],
       per_page: params[:per_page]
     )
 
-    @refiles = @refile_request.get_refiles
+    @refiles = @refile_error_search.get_refiles
   end
 
   def update_metadata
@@ -30,13 +30,13 @@ class ItemsController < OauthController
     message = Message.new(barcodes: barcodes, protect_cgd: params[:protect_cgd], action: 'update')
     if message.valid?
       message.send_update_message_to_sqs
-    elsif message.valid_barcodes.present? 
+    elsif message.valid_barcodes.present?
       valid_barcodes_message = Message.new(barcodes: message.valid_barcodes, protect_cgd: params[:protect_cgd], action: 'update')
       valid_barcodes_message.send_update_message_to_sqs
     end
-    
+
     message.protect_cgd = nil if message.errors.blank?
-    
+
     if barcodes.blank?
       flash[:error] = "Please enter one or more barcodes."
     elsif message.invalid_barcodes.present? && message.valid_barcodes.blank?
@@ -48,15 +48,15 @@ class ItemsController < OauthController
     if message.valid_barcodes.present? && message.invalid_barcodes.blank?
       flash[:success] = "The barcode(s) have been submitted for processing."
     end
-    redirect_to action: 'update_metadata', barcodes: message.invalid_barcodes, protect_cgd: message.protect_cgd 
+    redirect_to action: 'update_metadata', barcodes: message.invalid_barcodes, protect_cgd: message.protect_cgd
   end
-  
+
   def transfer_metadata
     @barcode = params[:barcode] ||= []
     @bib_record_number = params[:bib_record_number] ||= []
     @protect_cgd = params[:protect_cgd]
   end
-  
+
   def send_transfer_metadata
     barcode = params[:barcode].strip
     message = Message.new(barcodes: [barcode], protect_cgd: params[:protect_cgd], action: 'transfer', bib_record_number: params[:bib_record_number])
