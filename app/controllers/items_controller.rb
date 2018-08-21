@@ -3,7 +3,7 @@ class ItemsController < OauthController
 
   def refile
     @barcode = params[:barcode]
-    
+
     if params[:page] && params[:per_page]
       @offset = ( params[:page].to_i - 1 ) * params[:per_page].to_i
     else
@@ -73,9 +73,9 @@ class ItemsController < OauthController
     else
       flash[:errors] = "The system encountered an issue. Please retry your submission. If the problem persists, please contact the Digital team at scctech@nypl.org."
     end
-    redirect_to action: 'transfer_metadata', barcode: invalid_barcode, bib_record_number: invalid_bib_record_number, protect_cgd: protect_cgd 
+    redirect_to action: 'transfer_metadata', barcode: invalid_barcode, bib_record_number: invalid_bib_record_number, protect_cgd: protect_cgd
   end
-  
+
   def send_refile_request
     barcode = params[:barcode].strip
     refile_message = RefileRequest.new(barcode: barcode)
@@ -85,6 +85,6 @@ class ItemsController < OauthController
     else
       flash[:error] = refile_message.errors
     end
-    redirect_to action: 'refile', barcode: refile_message.invalid_barcode
+    redirect_to action: 'refile', barcode: refile_message.valid? ? nil : refile_message.barcode
   end
 end

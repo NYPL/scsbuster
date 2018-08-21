@@ -8,10 +8,11 @@ class RefileRequest
   include ActiveModel::Validations
   include ActiveModel::Model
   attr_accessor :bearer, :barcode
-  
-  validate :barcode_format
-  
-  # Authorizes the request. 
+
+  validates :barcode, format: { with: /\A\w{1,20}\z/, message: 'The barcode must be up to 20 alphanumeric characters in length.'}
+  validates_presence_of :barcode, message: 'Please enter a barcode.'
+
+  # Authorizes the request.
   def assign_bearer
     begin
       uri = URI.parse(ENV['OAUTH_TOKEN_URL'])
@@ -41,14 +42,10 @@ class RefileRequest
       self.bearer = nil
     end
   end
-  
-  def invalid_barcode
-    barcode if !barcode.match?(/^\w{20}$/)
-  end
-  
+
   def post_refile
     self.bearer     = self.assign_bearer
-    uri = URI.parse("#{API_BASE_URL}/recap/refile-requests")
+    uri = URI.parse("#{ENV['API_BASE_URL']}/recap/refile-requests")
     request = Net::HTTP::Post.new(uri)
     request.content_type = "application/json"
     request["Accept"] = "application/json"
@@ -72,18 +69,5 @@ class RefileRequest
       {}
     end
   end
-  
-  private
-  
-  def barcode_format
-    if barcode.blank? 
-      errors.add(:barcode, "Please enter a barcode.")
-    end
-    if barcode.is_a?(Array)
-      errors.add(:barcode, "Please enter a single barcode.")
-    end
-    if invalid_barcode.present?
-      errors.add(:barcode, "The barcode must be up to 20 alphanumeric characters in length.")
-    end
-  end
+
 end
