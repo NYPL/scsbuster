@@ -13,8 +13,8 @@ class ItemsController < OauthController
     @this_end_date = params[:date_end].present? ? Date.parse(params[:date_end]) : Date.today
 
     @refile_error_search = RefileErrorSearch.new(
-      date_start: params[:date_start],
-      date_end: params[:date_end],
+      date_start: @this_start_date,
+      date_end: @this_end_date,
       page: params[:page],
       per_page: params[:per_page]
     )
