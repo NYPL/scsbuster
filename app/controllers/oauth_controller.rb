@@ -75,12 +75,10 @@ class OauthController < ApplicationController
     end
   end
 
-  def log_out(previous_url = root_path)
-    session.delete(:access_token)
-    session.delete(:refresh_token)
-    session.delete(:access_token_expires_at)
-
-    redirect_to 'https://isso.nypl.org/auth/logout'
+  # Log out the user by clearing the session
+  def log_out
+    reset_session
+    redirect_to root_path
   end
 
   protected
