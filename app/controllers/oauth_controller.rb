@@ -54,6 +54,11 @@ class OauthController < ApplicationController
       begin
         # Get the access token and initialize it with ACCESS_TOKEN class
         self.class.token = OAUTH_CLIENT.auth_code.get_token(params[:code], :redirect_uri => ENV['OAUTH_CALLBACK_URL'])
+
+        session.delete(:access_token)
+        session.delete(:refresh_token)
+        session.delete(:access_token_expires_at)
+
         session[:access_token] = self.class.token.token
         session[:refresh_token] = self.class.token.refresh_token
         session[:access_token_expires_at] = self.class.token.expires_at
@@ -68,6 +73,14 @@ class OauthController < ApplicationController
         redirect_to root_path
       end
     end
+  end
+
+  def log_out(previous_url = root_path)
+    session.delete(:access_token)
+    session.delete(:refresh_token)
+    session.delete(:access_token_expires_at)
+
+    redirect_to 'https://isso.nypl.org/auth/logout'
   end
 
   protected
