@@ -2,12 +2,15 @@ require 'json'
 require 'net/http'
 require 'uri'
 
-# Model represents a search for RefileErrors
-class RefileErrorSearch
+# Model represents NYPL refile api request, both for get and post requests.
+class RefileRequest
+  extend ActiveModel::Naming
+  include ActiveModel::Validations
   include ActiveModel::Model
+  attr_accessor :bearer, :barcode
 
-  attr_writer :page, :per_page, :date_start,:date_end
-  attr_accessor :bearer
+  validates :barcode, format: { with: /\A\w{1,20}\z/, message: 'The barcode must be up to 20 alphanumeric characters in length.'}
+  validates_presence_of :barcode, message: 'Please enter a barcode.'
 
   # Authorizes the request.
   def assign_bearer
@@ -40,32 +43,16 @@ class RefileErrorSearch
     end
   end
 
-  def date_start
-    @date_start || Date.today - 10000
-  end
-
-  def date_end
-    @date_end || Date.today
-  end
-
-  def page
-    @page.present? ? @page.to_i : 1
-  end
-
-  def per_page
-    @per_page.present? ? @per_page.to_i : 25
-  end
-
-  def get_refiles
+  def post_refile
     self.bearer     = self.assign_bearer
-    this_start = date_start.strftime('%Y-%m-%d') + 'T00:00:00-00:00'
-    this_end = date_end.strftime('%Y-%m-%d') + 'T23:59:59-00:00'
-    offset = (page - 1) * per_page
-    request_string = "#{ENV['API_BASE_URL']}/recap/refile-errors?createdDate=[#{this_start},#{this_end}]&offset=#{offset}&limit=#{per_page}&includeTotalCount=true"
-    uri = URI.parse(request_string)
-    request = Net::HTTP::Get.new(uri)
+    uri = URI.parse("#{ENV['API_BASE_URL']}/recap/refile-requests")
+    request = Net::HTTP::Post.new(uri)
+    request.content_type = "application/json"
     request["Accept"] = "application/json"
     request["Authorization"] = "Bearer #{self.bearer}"
+    request.body = JSON.dump({
+      "itemBarcode" => self.barcode
+    })
 
     req_options = {
       use_ssl: uri.scheme == "https",
@@ -78,8 +65,9 @@ class RefileErrorSearch
     if response.code == "200"
       JSON.parse(response.body)
     else
-      Rails.logger.warn("Error getting refiles, response code #{response.code}")
+      # TODO: Log this.
       {}
     end
   end
+
 end

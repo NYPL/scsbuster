@@ -23,7 +23,7 @@ Forget Docker is there.**
 ### Running
 
 1. `docker-compose up`
-1. Go to http://localhost:3001
+1. Go to http://local.nypl.org:3001
 
 ### Testing
 
@@ -57,8 +57,8 @@ Our branches (in order of stability are):
 |:------------|:------------|:----------------|
 | master      | none        | none            |
 | development | development | aws-sandbox     |
+| qa          | qa          | aws-digital-dev |
 | production  | production  | aws-digital-dev |
-
 
 ### Cutting A Feature Branch
 
@@ -68,7 +68,8 @@ Our branches (in order of stability are):
 ### Deploying
 
 Merging `master` => `development` automatically deploys to the development environment. (after tests pass).
-Merging `development` => `production` automatically deploys to the production environment. (after tests pass).
+Merging `development` => `qa` automatically deploys to the qa environment. (after tests pass).
+Merging `qa` => `production` automatically deploys to the production environment. (after tests pass).
 
 For insight into how CD works look at [.travis.yml](./.travis.yml) and the
 [continuous_deployment](./continuous_deployment) directory.
