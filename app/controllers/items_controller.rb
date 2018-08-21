@@ -2,20 +2,24 @@ class ItemsController < OauthController
   before_action :authenticate
 
   def refile
-    @refile_request = RefileRequest.new
     @barcode = params[:barcode]
-    # TODO: Finish this in subsequent branch.
+    
     if params[:page] && params[:per_page]
       @offset = ( params[:page].to_i - 1 ) * params[:per_page].to_i
     else
       @offset = 0
     end
 
-    date_start = params[:date_start].present? ? params[:date_start] : nil
-    date_end = params[:date_end].present? ? params[:date_end] : nil
-    @refiles = get_refiles(date_start,date_end,params[:page],params[:per_page])
+    @refile_error_search = RefileErrorSearch.new(
+      date_start: params[:date_start],
+      date_end: params[:date_end],
+      page: params[:page],
+      per_page: params[:per_page]
+    )
+
+    @refiles = @refile_error_search.get_refiles
   end
-  
+
   def update_metadata
     @barcodes = params[:barcodes] ||= []
     @protect_cgd = params[:protect_cgd]
@@ -27,13 +31,13 @@ class ItemsController < OauthController
     message = Message.new(barcodes: barcodes, protect_cgd: params[:protect_cgd], action: 'update')
     if message.valid?
       message.send_update_message_to_sqs
-    elsif message.valid_barcodes.present? 
+    elsif message.valid_barcodes.present?
       valid_barcodes_message = Message.new(barcodes: message.valid_barcodes, protect_cgd: params[:protect_cgd], action: 'update')
       valid_barcodes_message.send_update_message_to_sqs
     end
-    
+
     message.protect_cgd = nil if message.errors.blank?
-    
+
     if barcodes.blank?
       flash[:error] = "Please enter one or more barcodes."
     elsif message.invalid_barcodes.present? && message.valid_barcodes.blank?
@@ -45,15 +49,15 @@ class ItemsController < OauthController
     if message.valid_barcodes.present? && message.invalid_barcodes.blank?
       flash[:success] = "The barcode(s) have been submitted for processing."
     end
-    redirect_to action: 'update_metadata', barcodes: message.invalid_barcodes, protect_cgd: message.protect_cgd 
+    redirect_to action: 'update_metadata', barcodes: message.invalid_barcodes, protect_cgd: message.protect_cgd
   end
-  
+
   def transfer_metadata
     @barcode = params[:barcode] ||= []
     @bib_record_number = params[:bib_record_number] ||= []
     @protect_cgd = params[:protect_cgd]
   end
-  
+
   def send_transfer_metadata
     barcode = params[:barcode].strip
     message = Message.new(barcodes: [barcode], protect_cgd: params[:protect_cgd], action: 'transfer', bib_record_number: params[:bib_record_number])
@@ -82,15 +86,5 @@ class ItemsController < OauthController
       flash[:error] = refile_message.errors
     end
     redirect_to action: 'refile', barcode: refile_message.invalid_barcode
-  end
-  
-  private
-  
-  def get_refiles(date_start, date_end, page, per_page)
-    @refile_request.date_start = date_start
-    @refile_request.date_end = date_end
-    @refile_request.page = page
-    @refile_request.per_page = per_page
-    @refile_request.get_refiles
   end
 end
