@@ -2,11 +2,7 @@ class ItemsController < OauthController
   before_action :authenticate
 
   def refile
-<<<<<<< HEAD
-=======
     @barcode = params[:barcode]
-
->>>>>>> master
     if params[:page] && params[:per_page]
       @offset = ( params[:page].to_i - 1 ) * params[:per_page].to_i
     else
