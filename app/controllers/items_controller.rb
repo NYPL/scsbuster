@@ -2,6 +2,11 @@ class ItemsController < OauthController
   before_action :authenticate
 
   def refile
+<<<<<<< HEAD
+=======
+    @barcode = params[:barcode]
+
+>>>>>>> master
     if params[:page] && params[:per_page]
       @offset = ( params[:page].to_i - 1 ) * params[:per_page].to_i
     else
@@ -82,5 +87,17 @@ class ItemsController < OauthController
     date_start = Date.new refile_error_search["date_start(1i)"].to_i, refile_error_search["date_start(2i)"].to_i, refile_error_search["date_start(3i)"].to_i
     date_end = Date.new refile_error_search["date_end(1i)"].to_i, refile_error_search["date_end(2i)"].to_i, refile_error_search["date_end(3i)"].to_i
     redirect_to action: 'refile', date_start: date_start, date_end: date_end
+  end 
+  
+  def send_refile_request
+    barcode = params[:barcode].strip
+    refile_message = RefileRequest.new(barcode: barcode)
+    if refile_message.valid?
+      refile_message.post_refile
+      flash[:success] = "The barcode has been submitted for processing."
+    else
+      flash[:error] = refile_message.errors
+    end
+    redirect_to action: 'refile', barcode: refile_message.valid? ? nil : refile_message.barcode
   end
 end

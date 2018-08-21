@@ -8,5 +8,6 @@ Rails.application.routes.draw do
   get "callback", controller: 'oauth', action: 'callback'
   post "send_metadata", controller: 'items', action: 'send_metadata'
   post "send_transfer_metadata", controller: 'items', action: 'send_transfer_metadata'
+  post "send_refile_request", controller: 'items', action: 'send_refile_request'
   root controller: 'items', :action => 'update_metadata'
 end

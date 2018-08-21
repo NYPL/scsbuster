@@ -2,7 +2,37 @@
 
 <h3>Set Item Status</h3>
 
-<p>Clear an &quot;in transit&quot; or &quot;checked out&quot; item status in Sierra</p>
+<p>Submit a barcode to clear its Sierra item status from "In transit" or "Checked out" to "Available."</p>
+<% flash.each do |key, value| %>
+  <% normalized_key = key == 'notice' ? 'success' : key %>
+  <div class="nypl-form-<%= normalized_key %>">
+    <% if key == 'success' %>
+      <h2>Success!</h2>
+      <p><%= value %></p>
+    <% elsif key == 'notice' %>
+      <p><%= value %></p>
+    <% elsif key == 'error' %>
+      <% value.each do |k, v| %>
+        <div class="flash_error flash_message nypl-required-field" id="flash_error">
+          <p><%= v.join('<br/>').html_safe if v.present? %></p>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>
+<%= form_tag action: 'send_refile_request' do -%>
+  <div>
+    <p>
+      <div class="nypl-text-field-with-label">
+        <label class="required">Barcode</label><span class="nypl-required-field"> Required</span>
+        <%= text_field_tag :barcode, @barcode, { class: 'required' } %>
+        <span class="nypl-field-status" id="barcodes-status" aria-live="assertive" aria-atomic="true">Enter a single barcode. Make sure the item is available in SCSB first.</span>
+      </div>
+      <div class="nypl-submit-button-wrapper"><%= submit_tag 'Submit', class: "nypl-primary-button" %></div>
+    </p>
+  </div>
+<% end -%>
+
 
 <h3>Refile Errors</h3>
 
@@ -55,7 +85,7 @@
             <td><%= Date.parse(refile["createdDate"]).strftime("%Y-%m-%d") if refile["createdDate"] %></td>
             <td><%= Date.parse(refile["updatedDate"]).strftime("%Y-%m-%d") if refile["updatedDate"]  %></td>
             <td class="af-message"><%= refile["afMessage"].delete('["').delete('"]') if refile["afMessage"].present? %></td>
-            <td>yes<td>
+            <td>yes</td>
           </tr>
         <% end %>
       </tbody>
