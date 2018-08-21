@@ -12,7 +12,7 @@ class RefileErrorSearch
   # Authorizes the request.
   def assign_bearer
     begin
-      uri = URI.parse(ENV['OAUTH_TOKEN_URL'])
+      uri = URI.parse("https://#{ENV['OAUTH_DOMAIN']}/oauth/token")
       request = Net::HTTP::Post.new(uri)
       request.basic_auth(ENV['CLIENT_ID'],ENV['CLIENT_SECRET'])
       request.set_form_data(

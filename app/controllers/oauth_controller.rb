@@ -11,7 +11,7 @@ class OauthController < ApplicationController
   # 4. Get the acceess token with the authorization code by requesting to the access token URL of ISSO.
   # And redirect back to the redirect URI again.
   # 5. Includes the access token we just got in the header for making HTTP requests.
-  OAUTH_CLIENT = OAuth2::Client.new(ENV['CLIENT_ID'], ENV['CLIENT_SECRET'], site: ENV['OAUTH_SITE'])
+  OAUTH_CLIENT = OAuth2::Client.new(ENV['CLIENT_ID'], ENV['CLIENT_SECRET'], site: "https://#{ENV['OAUTH_DOMAIN']}")
   OAUTH_SCOPE  = 'login:staff'
 
   class << self

@@ -4,8 +4,8 @@ class SqsClient
     if Rails.env.development?
       @sqs = Aws::SQS::Client.new(
         region: 'us-east-1',
-        access_key_id: AWS_KEY_ID,
-        secret_access_key: AWS_SECRET
+        access_key_id: ENV['AWS_KEY_ID'],
+        secret_access_key: ENV['AWS_SECRET']
       )
     else
       @sqs = Aws::SQS::Client.new(region: 'us-east-1')
