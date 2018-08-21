@@ -14,7 +14,7 @@
     <% elsif key == 'error' %>
       <% value.each do |k, v| %>
         <div class="flash_error flash_message nypl-required-field" id="flash_error">
-          <p><%= v.join('<br/>') if v.present? %></p>
+          <p><%= v.join('<br/>').html_safe if v.present? %></p>
         </div>
       <% end %>
     <% end %>
@@ -67,7 +67,7 @@
             <td><%= Date.parse(refile["createdDate"]).strftime("%Y-%m-%d") if refile["createdDate"] %></td>
             <td><%= Date.parse(refile["updatedDate"]).strftime("%Y-%m-%d") if refile["updatedDate"]  %></td>
             <td class="af-message"><%= refile["afMessage"].delete('["').delete('"]') if refile["afMessage"].present? %></td>
-            <td>yes<td>
+            <td>yes</td>
           </tr>
         <% end %>
       </tbody>
