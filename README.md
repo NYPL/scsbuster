@@ -34,17 +34,20 @@ _With the stack running..._
 
 1.  `docker-compose exec webapp bash` (brings you onto the running container)
 1.  `su app`, `cd ~/scsbuster && bundle exec rspec` (in container)
+1.  `exit` to leave bash.
 
 ### Rails Console
 
 1.  `docker-compose exec webapp bash` (brings you onto the running container)
 1.  `su app`, `cd ~/scsbuster && bundle exec rails c` (in container)
+1.  `exit` to leave bash.
 
 ### Debugging With Pry Remote
 
 1.  `docker-compose exec webapp bash` (brings you onto the running container)
 1.  In code, add your breakpoint with `binding.pry_remote`, hit the endpoint
 1.  `su app`, `cd ~/scsbuster && bundle exec pry-remote` (in container)
+1.  `exit` to leave bash.
 
 ## Git Workflow & Deployment
 
