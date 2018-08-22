@@ -4,7 +4,7 @@ require 'securerandom'
 class OauthController < ApplicationController
   # OAuth2 authentication process:
   # 1. Construct the authorize URL to ISSO with required parameters, such as,
-  # client ID, client secret, redirect URI, state, and scope
+  # client ID, client secret, redirect URI, state, and scope.
   # 2. Redirect the user to the authorize URL for logging in
   # 3. After logged in, redirect the user back to our application.
   # The redirect URL should now come with an authorization code.
@@ -94,7 +94,7 @@ class OauthController < ApplicationController
       new_token = OAUTH_CLIENT.get_token(refresh_params)
       new_token.refresh_token = session[:refresh_token] unless new_token.refresh_token
 
-      # Clear old session
+      # Clear the old session
       reset_session
 
       session[:access_token] = new_token.token
