@@ -4,21 +4,14 @@ require 'securerandom'
 class OauthController < ApplicationController
   # OAuth2 authentication process:
   # 1. Construct the authorize URL to ISSO with required parameters, such as,
-  # client ID, client secret, redirect URI, state, and scope
+  # client ID, client secret, redirect URI, state, and scope.
   # 2. Redirect the user to the authorize URL for logging in
   # 3. After logged in, redirect the user back to our application.
   # The redirect URL should now come with an authorization code.
   # 4. Get the acceess token with the authorization code by requesting to the access token URL of ISSO.
   # And redirect back to the redirect URI again.
-  # 5. Includes the access token we just got in the header for making HTTP requests.
   OAUTH_CLIENT = OAuth2::Client.new(ENV['CLIENT_ID'], ENV['CLIENT_SECRET'], site: ENV['OAUTH_SITE'])
-  OAUTH_SCOPE  = 'login:staff'
-
-  class << self
-    # token is the initalized ACCESS_TOKEN class after successfully called OAUTH_CLIENT.auth_code.get_token
-    # in callback method
-    attr_accessor :token
-  end
+  OAUTH_SCOPE  = 'openid login:staff offline_access'
 
   # Redirect the user to NYPL's SSO log in page
   def authenticate
@@ -53,17 +46,14 @@ class OauthController < ApplicationController
       # Catch the error and proceed to redirenct to '/' if we fail to get the access token
       begin
         # Get the access token and initialize it with ACCESS_TOKEN class
-        self.class.token = OAUTH_CLIENT.auth_code.get_token(params[:code], :redirect_uri => ENV['OAUTH_CALLBACK_URL'])
+        token = OAUTH_CLIENT.auth_code.get_token(params[:code], :redirect_uri => ENV['OAUTH_CALLBACK_URL'])
 
         # Clear the old session, if we happened to have any
         [:access_token, :refresh_token, :access_token].each { |key| session.delete(key) }
 
-        session[:access_token] = self.class.token.token
-        session[:refresh_token] = self.class.token.refresh_token
-        session[:access_token_expires_at] = self.class.token.expires_at
-
-        # Now we can put "Authorization: bearer #{session[:access_token]}" in the header when making an HTTP request
-        # Or, we can use self.class.token.get self.class.token.post to make requests
+        session[:access_token] = token.token
+        session[:refresh_token] = token.refresh_token
+        session[:access_token_expires_at] = token.expires_at
 
         # TODO: we need an authorization to check if the user is on the white list of the scsbuster
         redirect_to session[:original_url]
@@ -89,12 +79,24 @@ class OauthController < ApplicationController
   def refresh_access_token(previous_url = root_path)
     Rails.logger.debug('Going to refresh access token.')
 
+    # Set the parametets to call refresh access token API
     begin
-      self.class.token = self.class.token.refresh!
+      refresh_params = {
+        grant_type: 'refresh_token',
+        refresh_token: session[:refresh_token],
+        client_id: ENV['CLIENT_ID'],
+        client_secret: ENV['CLIENT_SECRET']
+      }
 
-      session[:access_token] = self.class.token.token
-      session[:refresh_token] = self.class.token.refresh_token
-      session[:access_token_expires_at] = self.class.token.expires_at
+      new_token = OAUTH_CLIENT.get_token(refresh_params)
+      new_token.refresh_token = session[:refresh_token] unless new_token.refresh_token
+
+      # Clear the old session
+      reset_session
+
+      session[:access_token] = new_token.token
+      session[:refresh_token] = new_token.refresh_token
+      session[:access_token_expires_at] = new_token.expires_at
 
       redirect_to previous_url
     rescue
