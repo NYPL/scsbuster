@@ -49,10 +49,8 @@ class OauthController < ApplicationController
         # Get the access token and initialize it with ACCESS_TOKEN class
         token = OAUTH_CLIENT.auth_code.get_token(params[:code], :redirect_uri => ENV['OAUTH_CALLBACK_URL'])
 
-        # Clear the old session if we happened to have one
-        session.delete(:access_token)
-        session.delete(:refresh_token)
-        session.delete(:access_token_expires_at)
+        # Clear the old session, if we happened to have any
+        [:access_token, :refresh_token, :access_token].each { |key| session.delete(key) }
 
         session[:access_token] = token.token
         session[:refresh_token] = token.refresh_token
