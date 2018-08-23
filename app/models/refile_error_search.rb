@@ -41,7 +41,7 @@ class RefileErrorSearch
   end
 
   def date_start
-    @date_start || Date.today - 10000
+    @date_start || Date.today - 1
   end
 
   def date_end
@@ -58,8 +58,8 @@ class RefileErrorSearch
 
   def get_refiles
     self.bearer     = self.assign_bearer
-    this_start = date_start.strftime('%Y-%m-%d') + 'T00:00:00-00:00'
-    this_end = date_end.strftime('%Y-%m-%d') + 'T23:59:59-00:00'
+    this_start = date_start.strftime('%Y-%m-%d') + 'T00:00:00-04:00'
+    this_end = date_end.strftime('%Y-%m-%d') + 'T23:59:59-04:00'
     offset = (page - 1) * per_page
     request_string = "#{ENV['API_BASE_URL']}/recap/refile-errors?createdDate=[#{this_start},#{this_end}]&offset=#{offset}&limit=#{per_page}&includeTotalCount=true"
     uri = URI.parse(request_string)
