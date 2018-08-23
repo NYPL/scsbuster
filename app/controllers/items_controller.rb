@@ -3,16 +3,18 @@ class ItemsController < OauthController
 
   def refile
     @barcode = params[:barcode]
-
     if params[:page] && params[:per_page]
       @offset = ( params[:page].to_i - 1 ) * params[:per_page].to_i
     else
       @offset = 0
     end
+    
+    @this_start_date = params[:date_start].present? ? Date.parse(params[:date_start]) : Date.today - 1
+    @this_end_date = params[:date_end].present? ? Date.parse(params[:date_end]) : Date.today
 
     @refile_error_search = RefileErrorSearch.new(
-      date_start: params[:date_start],
-      date_end: params[:date_end],
+      date_start: @this_start_date,
+      date_end: @this_end_date,
       page: params[:page],
       per_page: params[:per_page]
     )
@@ -75,7 +77,14 @@ class ItemsController < OauthController
     end
     redirect_to action: 'transfer_metadata', barcode: invalid_barcode, bib_record_number: invalid_bib_record_number, protect_cgd: protect_cgd
   end
-
+  
+  def search_refile_errors
+    refile_error_search = params['refile_error_search']
+    date_start = Date.new refile_error_search["date_start(1i)"].to_i, refile_error_search["date_start(2i)"].to_i, refile_error_search["date_start(3i)"].to_i
+    date_end = Date.new refile_error_search["date_end(1i)"].to_i, refile_error_search["date_end(2i)"].to_i, refile_error_search["date_end(3i)"].to_i
+    redirect_to action: 'refile', date_start: date_start, date_end: date_end
+  end 
+  
   def send_refile_request
     barcode = params[:barcode].strip
     refile_message = RefileRequest.new(barcode: barcode)
