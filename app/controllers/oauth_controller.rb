@@ -10,7 +10,6 @@ class OauthController < ApplicationController
   # The redirect URL should now come with an authorization code.
   # 4. Get the acceess token with the authorization code by requesting to the access token URL of ISSO.
   # And redirect back to the redirect URI again.
-  # 5. Includes the access token we just got in the header for making HTTP requests.
   OAUTH_CLIENT = OAuth2::Client.new(ENV['CLIENT_ID'], ENV['CLIENT_SECRET'], site: ENV['OAUTH_SITE'])
   OAUTH_SCOPE  = 'openid login:staff offline_access'
 
