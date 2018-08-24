@@ -129,7 +129,7 @@ class OauthController < ApplicationController
       s3 = Aws::S3::Client.new({
         access_key_id: ENV['AWS_KEY_ID'],
         secret_access_key: ENV['AWS_SECRET'],
-        region: 'us-east-1'
+        region: ENV['SQS_REGION']
       })
       # response.body returns a StringIO instance
       response = s3.get_object({ bucket: 'nypl-platform-admin', key: 'authorization.json' })
