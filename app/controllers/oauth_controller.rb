@@ -1,5 +1,6 @@
 require 'oauth2'
 require 'securerandom'
+require 'aws-sdk-s3'
 
 class OauthController < ApplicationController
   # OAuth2 authentication process:
@@ -55,8 +56,14 @@ class OauthController < ApplicationController
         session[:refresh_token] = token.refresh_token
         session[:access_token_expires_at] = token.expires_at
 
-        # TODO: we need an authorization to check if the user is on the white list of the scsbuster
-        redirect_to session[:original_url]
+        # Check if the user is on the white list of the scsbuster
+        if is_user_authorized
+          redirect_to session[:original_url]
+        else
+          Rails.logger.debug('The user is not authorized.')
+          redirect_to "/error?message=not_authorized"
+        end
+
       rescue
         Rails.logger.debug('Failed to get access token.')
         redirect_to root_path
@@ -103,5 +110,37 @@ class OauthController < ApplicationController
       Rails.logger.debug('Falied to refresh access token.')
       redirect_to authenticate_path
     end
+  end
+
+  # The method to check if the logged in user on the authorized user list
+  # It will request the list from our AWS S3 then compare the email addresses
+  def is_user_authorized
+    if session[:access_token]
+      # Get the logged in user's email from the access token
+      decoded_token_array = JWT.decode session[:access_token], nil, false
+      # First item of the array is the payload of the JWT encoded token. sub is the key of email value
+      user_email = decoded_token_array.first.fetch('sub')
+    else
+      user_email = nil
+    end
+
+    # Get the authorized user list from S3
+    begin
+      s3 = Aws::S3::Client.new({
+        access_key_id: ENV['AWS_KEY_ID'],
+        secret_access_key: ENV['AWS_SECRET'],
+        region: 'us-east-1'
+      })
+      # response.body returns a StringIO instance
+      response = s3.get_object({ bucket: 'nypl-platform-admin', key: 'authorization.json' })
+      authorized_user_list = response.body.read
+    rescue Aws::S3::Errors::ServiceError
+      Rails.logger.debug('Failed to get the authorized user list from AWS S3.')
+    end
+
+    # See if the logged in user listed in the authorized user list
+    user_authorized = authorized_user_list ? authorized_user_list.include?(user_email) : false
+
+    user_authorized
   end
 end
