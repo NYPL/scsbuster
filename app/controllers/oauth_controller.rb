@@ -107,7 +107,7 @@ class OauthController < ApplicationController
 
       redirect_to previous_url
     rescue
-      Rails.logger.debug('Falied to refresh access token.')
+      Rails.logger.debug('Failed to refresh access token.')
       redirect_to authenticate_path
     end
   end
@@ -115,14 +115,7 @@ class OauthController < ApplicationController
   # The method to check if the logged in user on the authorized user list
   # It will request the list from our AWS S3 then compare the email addresses
   def is_user_authorized
-    if session[:access_token]
-      # Get the logged in user's email from the access token
-      decoded_token_array = JWT.decode session[:access_token], nil, false
-      # First item of the array is the payload of the JWT encoded token. sub is the key of email value
-      user_email = decoded_token_array.first.fetch('sub')
-    else
-      user_email = nil
-    end
+    user_email = User.new(access_token: session[:access_token]).get_email_address
 
     # Get the authorized user list from S3
     begin
