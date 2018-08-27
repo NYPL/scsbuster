@@ -80,8 +80,12 @@ class ItemsController < OauthController
   
   def search_refile_errors
     refile_error_search = params['refile_error_search']
-    date_start = Date.new refile_error_search["date_start(1i)"].to_i, refile_error_search["date_start(2i)"].to_i, refile_error_search["date_start(3i)"].to_i
-    date_end = Date.new refile_error_search["date_end(1i)"].to_i, refile_error_search["date_end(2i)"].to_i, refile_error_search["date_end(3i)"].to_i
+    begin
+      date_start = Date.new(refile_error_search["date_start(1i)"].to_i, refile_error_search["date_start(2i)"].to_i, refile_error_search["date_start(3i)"].to_i)
+      date_end = Date.new(refile_error_search["date_end(1i)"].to_i, refile_error_search["date_end(2i)"].to_i, refile_error_search["date_end(3i)"].to_i)
+    rescue Exception => e
+      flash[:date_error] = 'Please enter a valid date range.'
+    end
     redirect_to action: 'refile', date_start: date_start, date_end: date_end
   end 
   
