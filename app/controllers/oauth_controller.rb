@@ -107,7 +107,7 @@ class OauthController < ApplicationController
 
       redirect_to previous_url
     rescue
-      Rails.logger.debug('Falied to refresh access token.')
+      Rails.logger.debug('Failed to refresh access token.')
       redirect_to authenticate_path
     end
   end
