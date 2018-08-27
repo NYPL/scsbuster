@@ -12,10 +12,16 @@
     <% elsif key == 'notice' %>
       <p><%= value %></p>
     <% elsif key == 'error' %>
-      <% value.each do |k, v| %>
+      <% if value.is_a? String %>
         <div class="flash_error flash_message nypl-required-field" id="flash_error">
-          <p><%= v.join('<br/>').html_safe if v.present? %></p>
+          <p><%= value %></p>
         </div>
+      <% else %>
+        <% value.each do |k, v| %>
+          <div class="flash_error flash_message nypl-required-field" id="flash_error">
+            <p><%= v.join('<br/>').html_safe if v.present? %></p>
+          </div>
+        <% end %> 
       <% end %>
     <% end %>
   </div>
@@ -37,6 +43,12 @@
 <h3>Refile Errors</h3>
 
 <p>Enter dates below to see errors for a specific date range</p>
+
+<% if flash[:date_error].present? %>
+  <div class="flash_error flash_message nypl-required-field" id="flash_error">
+    <p><%= flash[:date_error] %></p>
+  </div>
+<% end %>
 
 <%= form_tag action: 'search_refile_errors' do -%>
   <div class="nypl-name-field nypl-filter-date-field">
