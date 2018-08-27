@@ -57,7 +57,7 @@ class OauthController < ApplicationController
         session[:access_token_expires_at] = token.expires_at
 
         # Check if the user is on the white list of the scsbuster
-        if is_user_authorized
+        if is_user_authorized?
           redirect_to session[:original_url]
         else
           Rails.logger.debug('The user is not authorized.')
@@ -114,7 +114,7 @@ class OauthController < ApplicationController
 
   # The method to check if the logged in user on the authorized user list
   # It will request the list from our AWS S3 then compare the email addresses
-  def is_user_authorized
+  def is_user_authorized?
     user_email = User.new(access_token: session[:access_token]).get_email_address
 
     # Get the authorized user list from S3
