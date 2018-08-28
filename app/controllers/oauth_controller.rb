@@ -1,6 +1,5 @@
 require 'oauth2'
 require 'securerandom'
-require 'aws-sdk-s3'
 
 class OauthController < ApplicationController
   # OAuth2 authentication process:
@@ -57,7 +56,7 @@ class OauthController < ApplicationController
         session[:access_token_expires_at] = token.expires_at
 
         # Check if the user is on the white list of the scsbuster
-        if is_user_authorized
+        if is_user_authorized?
           redirect_to session[:original_url]
         else
           Rails.logger.debug('The user is not authorized.')
@@ -114,26 +113,8 @@ class OauthController < ApplicationController
 
   # The method to check if the logged in user on the authorized user list
   # It will request the list from our AWS S3 then compare the email addresses
-  def is_user_authorized
-    user_email = User.new(access_token: session[:access_token]).get_email_address
-
-    # Get the authorized user list from S3
-    begin
-      s3 = Aws::S3::Client.new({
-        access_key_id: ENV['AWS_KEY_ID'],
-        secret_access_key: ENV['AWS_SECRET'],
-        region: ENV['SQS_REGION']
-      })
-      # response.body returns a StringIO instance
-      response = s3.get_object({ bucket: 'nypl-platform-admin', key: 'authorization.json' })
-      authorized_user_list = response.body.read
-    rescue Aws::S3::Errors::ServiceError
-      Rails.logger.debug('Failed to get the authorized user list from AWS S3.')
-    end
-
-    # See if the logged in user listed in the authorized user list
-    user_authorized = authorized_user_list ? authorized_user_list.include?(user_email) : false
-
-    user_authorized
+  def is_user_authorized?
+    user = User.new(access_token: session[:access_token])
+    user.is_authorized?
   end
 end
