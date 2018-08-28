@@ -3,37 +3,31 @@ require "rails_helper"
 describe User do
   # the payload of the mock_access_token_authorized:
   # {
-  #   "iss": "isso.nypl.org",
   #   "sub": "whale@example.com",
-  #   "aud": "platform_admin",
   #   "iat": 1535403447,
   #   "exp": 1535407047,
   #   "auth_time": 1535403446,
-  #   "scope": "openid login:staff offline_access",
   #   "email": "whale@example.com",
   #   "email_verified": true,
   #   "name": "Whale Blue",
   #   "given_name": "Whale",
   #   "family_name": "Blue"
   # }
-  mock_access_token_authorized = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJpc3NvLm55cGwub3JnIiwic3ViIjoid2hhbGVAZXhhbXBsZS5jb20iLCJhdWQiOiJwbGF0Zm9ybV9hZG1pbiIsImlhdCI6MTUzNTQwMzQ0NywiZXhwIjoxNTM1NDA3NzI3LCJhdXRoX3RpbWUiOjE1MzU0MDM0NDYsInNjb3BlIjoib3BlbmlkIGxvZ2luOnN0YWZmIG9mZmxpbmVfYWNjZXNzIiwiZW1haWwiOiJ3aGFsZUBleGFtcGxlLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJuYW1lIjoiV2hhbGUgQmx1ZSIsImdpdmVuX25hbWUiOiJXaGFsZSIsImZhbWlseV9uYW1lIjoiQmx1ZSIsImp0aSI6IjUyNmY0MjQ2LWMyZDUtNDllOC04MTJlLTZjOTkzMmNhMmM5MiJ9.SyWeEdywfh1WUBQn8bL7KL3RuUKf_EUsmg4_sSjwaTg"
+  mock_access_token_authorized = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ3aGFsZUBleGFtcGxlLmNvbSIsImlhdCI6MTUzNTQwMzQ0NywiZXhwIjoxNTM1NDc4MDYzLCJhdXRoX3RpbWUiOjE1MzU0MDM0NDYsImVtYWlsIjoid2hhbGVAZXhhbXBsZS5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwibmFtZSI6IldoYWxlIEJsdWUiLCJnaXZlbl9uYW1lIjoiV2hhbGUiLCJmYW1pbHlfbmFtZSI6IkJsdWUiLCJqdGkiOiI5ZGM2MGVhOS04ZDQ1LTRlNTctYTc4Yy00NGI0NWU3OTVkMzQifQ.a3jacg15drcs0aFmKrIqNMBe5Ko2svbUYPHleflhAng"
 
   # the payload of the mock_access_token_not_authorized:
   # {
-  #   "iss": "isso.nypl.org",
   #   "sub": "swordfish@example.com",
-  #   "aud": "platform_admin",
   #   "iat": 1535403447,
   #   "exp": 1535407047,
   #   "auth_time": 1535403446,
-  #   "scope": "openid login:staff offline_access",
   #   "email": "swordfish@example.com",
   #   "email_verified": true,
-  #   "name": "Whale Blue",
-  #   "given_name": "Whale",
-  #   "family_name": "Blue"
+  #   "name": "Swordfish Coral",
+  #   "given_name": "Swordfish",
+  #   "family_name": "Coral"
   # }
-  mock_access_token_not_authorized = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJpc3NvLm55cGwub3JnIiwic3ViIjoic3dvcmRmaXNoQGV4YW1wbGUuY29tIiwiYXVkIjoicGxhdGZvcm1fYWRtaW4iLCJpYXQiOjE1MzU0MDM0NDcsImV4cCI6MTUzNTQ3NjE2NiwiYXV0aF90aW1lIjoxNTM1NDAzNDQ2LCJzY29wZSI6Im9wZW5pZCBsb2dpbjpzdGFmZiBvZmZsaW5lX2FjY2VzcyIsImVtYWlsIjoic3dvcmRmaXNoQGV4YW1wbGUuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsIm5hbWUiOiJXaGFsZSBCbHVlIiwiZ2l2ZW5fbmFtZSI6IldoYWxlIiwiZmFtaWx5X25hbWUiOiJCbHVlIiwianRpIjoiMzQzNjBjNzItZDI0ZS00M2FlLThmY2MtMTQ1NmMwZTM2NzEzIn0.prCyre0UzxpbBna_Hih4wizPAADLb7WOlPmaMMzA5jQ"
+  mock_access_token_not_authorized = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzd29yZGZpc2hAZXhhbXBsZS5jb20iLCJpYXQiOjE1MzU0MDM0NDcsImV4cCI6MTUzNTQ3Nzk5MiwiYXV0aF90aW1lIjoxNTM1NDAzNDQ2LCJlbWFpbCI6InN3b3JkZmlzaEBleGFtcGxlLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJuYW1lIjoiU3dvcmRmaXNoIENvcmFsIiwiZ2l2ZW5fbmFtZSI6IlN3b3JkZmlzaCIsImZhbWlseV9uYW1lIjoiQ29yYWwiLCJqdGkiOiI5ODVhMDM1ZC04NGRiLTQzMTgtODMyMS0yNDhiNGRlYjQxMzAifQ.-kG0WzUwruhdDmbeWa0oTYdxLM17as-5DvfKq8Y8QEA"
 
   describe "get_email_address" do
     it "should return nil as the user's email address if no access token is offered" do
