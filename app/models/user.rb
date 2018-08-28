@@ -4,7 +4,7 @@ class User
 
   # Get the authorized user list from S3
   def self.get_authorized_list
-    authorized_list = nil 
+    authorized_list = nil
     begin
       s3 = Aws::S3::Client.new({
         access_key_id: ENV['AWS_KEY_ID'],
