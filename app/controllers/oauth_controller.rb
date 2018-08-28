@@ -1,6 +1,5 @@
 require 'oauth2'
 require 'securerandom'
-require 'aws-sdk-s3'
 
 class OauthController < ApplicationController
   # OAuth2 authentication process:
