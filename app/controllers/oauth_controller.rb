@@ -59,8 +59,10 @@ class OauthController < ApplicationController
         if is_user_authorized?
           redirect_to session[:original_url]
         else
+          # Clear the session if the user is not authorized
+          reset_session
           Rails.logger.debug('The user is not authorized.')
-          redirect_to '/error?message=user_not_authorized'
+          redirect_to '/error?type=user_not_authorized'
         end
 
       rescue
