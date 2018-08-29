@@ -29,12 +29,14 @@ class ItemsController < OauthController
 
   def send_metadata
     # don't let it fool you. params[:barcodes] is text.
+    user = User.new(access_token: session[:access_token])
+    user_email = user.get_email_address
     barcodes = params[:barcodes].strip.split(/[\W\s]+/)
-    message = Message.new(barcodes: barcodes, protect_cgd: params[:protect_cgd], action: 'update')
+    message = Message.new(barcodes: barcodes, protect_cgd: params[:protect_cgd], action: 'update', user_email: user_email)
     if message.valid?
       message.send_update_message_to_sqs
     elsif message.valid_barcodes.present?
-      valid_barcodes_message = Message.new(barcodes: message.valid_barcodes, protect_cgd: params[:protect_cgd], action: 'update')
+      valid_barcodes_message = Message.new(barcodes: message.valid_barcodes, protect_cgd: params[:protect_cgd], action: 'update', user_email: user_email)
       valid_barcodes_message.send_update_message_to_sqs
     end
 
@@ -62,7 +64,9 @@ class ItemsController < OauthController
 
   def send_transfer_metadata
     barcode = params[:barcode].strip
-    message = Message.new(barcodes: [barcode], protect_cgd: params[:protect_cgd], action: 'transfer', bib_record_number: params[:bib_record_number])
+    user = User.new(access_token: session[:access_token])
+    user_email = user.get_email_address
+    message = Message.new(barcodes: [barcode], protect_cgd: params[:protect_cgd], action: 'transfer', bib_record_number: params[:bib_record_number], user_email: user_email)
     invalid_barcode, invalid_bib_record_number = [nil, nil]
     if message.valid?
       message.send_transfer_message_to_sqs
