@@ -40,12 +40,9 @@ class User
 
     email_address
   end
-  
+
   def is_authorized?
     authorized_list = User.get_authorized_list
-
-    # See if the logged in user listed in the authorized user list
-    user_authorized = authorized_list ? authorized_list.include?(self.get_email_address) : false
-    user_authorized
+    (authorized_list && authorized_list.include?(self.get_email_address))
   end
 end
