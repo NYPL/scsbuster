@@ -20,7 +20,7 @@ class User
       end
 
       # response.body returns a StringIO instance
-      response = s3.get_object({ bucket: 'nypl-platform-admin', key: 'authorization.json' })
+      response = s3.get_object({ bucket: ENV['AUTHORIZED_USER_BUCKET'], key: 'authorization.json' })
       authorized_list = response.body.read
     rescue Aws::S3::Errors::ServiceError
       Rails.logger.debug('Failed to get the authorized user list from AWS S3.')
