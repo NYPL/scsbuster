@@ -33,7 +33,7 @@ describe User do
     it "should return nil as the user's email address if no access token is offered" do
       user_email = User.new(access_token: nil).get_email_address
 
-      expect(user_email).to eq(nil)
+      expect(user_email).to be_nil
     end
 
     it "should decode and get the user's email address if there is a valid access token" do

@@ -1,6 +1,6 @@
 class ErrorController < ApplicationController
   # Render the error page based on the error type
-  def render_error_page
+  def error
     # Tells the view this is an error page so the navigation list is not needed
     @is_error_page = true
     # the error type that is passed from the query of the URL
