@@ -11,11 +11,11 @@ class User
         s3 = Aws::S3::Client.new({
           access_key_id: ENV['AWS_KEY_ID'],
           secret_access_key: ENV['AWS_SECRET'],
-          region: ENV['SQS_REGION']
+          region: ENV['AWS_REGION']
         })
       else
         s3 = Aws::S3::Client.new({
-          region: ENV['SQS_REGION']
+          region: ENV['AWS_REGION']
         })
       end
 
