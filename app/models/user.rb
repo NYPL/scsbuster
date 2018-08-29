@@ -6,13 +6,21 @@ class User
   def self.get_authorized_list
     authorized_list = nil
     begin
-      s3 = Aws::S3::Client.new({
-        access_key_id: ENV['AWS_KEY_ID'],
-        secret_access_key: ENV['AWS_SECRET'],
-        region: ENV['SQS_REGION']
-      })
+      # Construct the S3 client instance in different ways based on different environments
+      if Rails.env.development?
+        s3 = Aws::S3::Client.new({
+          access_key_id: ENV['AWS_KEY_ID'],
+          secret_access_key: ENV['AWS_SECRET'],
+          region: ENV['AWS_REGION']
+        })
+      else
+        s3 = Aws::S3::Client.new({
+          region: ENV['AWS_REGION']
+        })
+      end
+
       # response.body returns a StringIO instance
-      response = s3.get_object({ bucket: 'nypl-platform-admin', key: 'authorization.json' })
+      response = s3.get_object({ bucket: ENV['AUTHORIZED_USER_BUCKET'], key: 'authorization.json' })
       authorized_list = response.body.read
     rescue Aws::S3::Errors::ServiceError
       Rails.logger.debug('Failed to get the authorized user list from AWS S3.')
@@ -32,12 +40,9 @@ class User
 
     email_address
   end
-  
+
   def is_authorized?
     authorized_list = User.get_authorized_list
-
-    # See if the logged in user listed in the authorized user list
-    user_authorized = authorized_list ? authorized_list.include?(self.get_email_address) : false
-    user_authorized
+    (authorized_list && authorized_list.include?(self.get_email_address))
   end
 end
