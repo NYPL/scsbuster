@@ -9,6 +9,8 @@ gem 'uglifier', '>= 1.3.0'
 gem 'faraday'
 gem 'coffee-rails', '~> 4.2'
 gem 'aws-sdk-sqs', '~> 1.3'
+gem 'aws-sdk-s3', '~> 1'
+gem 'jwt'
 
 # Used in asset pipeline for styling
 gem 'design-toolkit', :git => 'https://github.com/NYPL/design-toolkit.git'

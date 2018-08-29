@@ -57,6 +57,13 @@ GEM
       aws-partitions (~> 1.0)
       aws-sigv4 (~> 1.0)
       jmespath (~> 1.0)
+    aws-sdk-kms (1.7.0)
+      aws-sdk-core (~> 3)
+      aws-sigv4 (~> 1.0)
+    aws-sdk-s3 (1.17.0)
+      aws-sdk-core (~> 3, >= 3.21.2)
+      aws-sdk-kms (~> 1)
+      aws-sigv4 (~> 1.0)
     aws-sdk-sqs (1.4.0)
       aws-sdk-core (~> 3)
       aws-sigv4 (~> 1.0)
@@ -90,6 +97,7 @@ GEM
       concurrent-ruby (~> 1.0)
     jmespath (1.4.0)
     json (2.1.0)
+    jwt (2.1.0)
     listen (3.1.5)
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
@@ -217,12 +225,14 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  aws-sdk-s3 (~> 1)
   aws-sdk-sqs (~> 1.3)
   bootsnap (>= 1.1.0)
   byebug
   coffee-rails (~> 4.2)
   design-toolkit!
   faraday
+  jwt
   listen (>= 3.0.5, < 3.2)
   oauth2
   pry-remote

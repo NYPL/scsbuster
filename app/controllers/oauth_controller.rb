@@ -55,8 +55,14 @@ class OauthController < ApplicationController
         session[:refresh_token] = token.refresh_token
         session[:access_token_expires_at] = token.expires_at
 
-        # TODO: we need an authorization to check if the user is on the white list of the scsbuster
-        redirect_to session[:original_url]
+        # Check if the user is on the white list of the scsbuster
+        if is_user_authorized?
+          redirect_to session[:original_url]
+        else
+          Rails.logger.debug('The user is not authorized.')
+          redirect_to error_path(message: 'not_authorized')
+        end
+
       rescue
         Rails.logger.debug('Failed to get access token.')
         redirect_to root_path
@@ -100,8 +106,15 @@ class OauthController < ApplicationController
 
       redirect_to previous_url
     rescue
-      Rails.logger.debug('Falied to refresh access token.')
+      Rails.logger.debug('Failed to refresh access token.')
       redirect_to authenticate_path
     end
+  end
+
+  # The method to check if the logged in user on the authorized user list
+  # It will request the list from our AWS S3 then compare the email addresses
+  def is_user_authorized?
+    user = User.new(access_token: session[:access_token])
+    user.is_authorized?
   end
 end
