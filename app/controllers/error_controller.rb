@@ -1,7 +1,7 @@
 class ErrorController < ApplicationController
   # Render the error page based on the error type
   def error
-    # Tells the view this is an error page so the navigation list is not needed
+    # Tell the view this is an error page so the navigation list is not needed
     @is_error_page = true
     # the error type that is passed from the query of the URL
     @current_error_type = params[:type].to_s || ''
@@ -18,7 +18,7 @@ class ErrorController < ApplicationController
       { type: 'user_not_authorized', message: 'The user is not authorized.', instruction: @instruction_user_not_authorized }
     ]
 
-    # Assign the message and the instruction if it is a special error type
+    # Assign the particular message and the instruction if it is a special error type
     @special_error_type_array.each do |e|
       if e[:type] === @current_error_type
         @error_message = e[:message]
