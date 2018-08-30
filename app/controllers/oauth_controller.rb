@@ -62,12 +62,14 @@ class OauthController < ApplicationController
           # Clear the session if the user is not authorized
           reset_session
           Rails.logger.debug('The user is not authorized.')
-          redirect_to error_path(type: 'not_authorized')
+          redirect_to error_path(type: 'user_not_authorized')
         end
 
       rescue
         Rails.logger.debug('Failed to get access token.')
-        redirect_to root_path
+        # Clear the session if OAuth authentication process fails
+        reset_session
+        redirect_to error_path(type: 'authentication_failed')
       end
     end
   end
@@ -109,6 +111,8 @@ class OauthController < ApplicationController
       redirect_to previous_url
     rescue
       Rails.logger.debug('Failed to refresh access token.')
+      # Clear the old session
+      reset_session
       redirect_to authenticate_path
     end
   end
