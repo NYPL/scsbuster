@@ -1,6 +1,6 @@
 module ErrorHelper
   # _path & _url helpers are usually available in instance, not class scope.
-  URL_HELPERS = route_url_helpers = Rails.application.routes.url_helpers
+  URL_HELPERS = Rails.application.routes.url_helpers
 
   # Set the constants for different error types
   ERROR_DEFAULT = {
