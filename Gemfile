@@ -23,6 +23,8 @@ group :development, :test do
   gem 'pry-remote'
   gem 'rubycop'
   gem 'rspec'
+  gem 'rspec-rails', '~> 3.7'
+  gem 'rails-controller-testing'
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
 end
 
