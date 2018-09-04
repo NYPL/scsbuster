@@ -18,7 +18,7 @@
       </header>
       <div class="nypl-full-width-wrapper app-content">
         <div class="nypl-row">
-          <% if !@is_error_page %>
+          <% unless controller.controller_name == "error" %>
             <nav class="nypl-column-one-quarter sidebar-navigation" id="sidebar-navigation">
               <ul>
                 <li><%= link_to "Update Metadata", update_metadata_path %></li>
