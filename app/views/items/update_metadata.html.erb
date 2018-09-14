@@ -20,14 +20,14 @@
   <div>
     <p>
       <div class="nypl-text-area-with-label">
-        <label class="required">Barcode(s)</label><span class="nypl-required-field"> Required</span>
-        <%= text_area_tag :barcodes, @barcodes.join(', '), { class: 'required', rows: 50, cols: 75 } %>
+        <label class="required" id="barcode-list">Barcode(s)</label><span class="nypl-required-field"> Required</span>
+        <%= text_area_tag :barcodes, @barcodes.join(', '), { class: 'required', rows: 50, cols: 75, aria: { labelledby: 'barcode-list barcodes-status' } } %>
         <span class="nypl-field-status" id="barcodes-status" aria-live="assertive" aria-atomic="true">Enter a single barcode or multiple barcodes separated by a comma or return.</span>
       </div>
       <br/>
       <div class="nypl-text-area-with-label">
-        <%= check_box_tag(:protect_cgd, true, @protect_cgd) %> Protect CGD
-        <span class="nypl-field-status" id="barcodes-status" aria-live="assertive" aria-atomic="true">Check this box to preserve the item's current Collection Group Designation in SCSB.</span>
+        <%= check_box_tag(:protect_cgd, true, @protect_cgd, { aria: { labelledby: 'protect-cgd protect-cgd-status' } } ) %> <label id="protect-cgd">Protect CGD</label>
+        <span class="nypl-field-status" id="protect-cgd-status" aria-live="assertive" aria-atomic="true">Check this box to preserve the item's current Collection Group Designation in SCSB.</span>
       </div>
       <div class="nypl-submit-button-wrapper"><%= submit_tag 'Submit', class: "nypl-primary-button" %></div>
     </p>
