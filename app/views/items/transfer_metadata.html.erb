@@ -22,9 +22,9 @@
   <div>
     <p>
       <div class="nypl-text-field-with-label">
-        <label class="required" id="barcode">Barcode</label><span class="nypl-required-field"> Required</span>
-        <%= text_field_tag :barcode, @barcode, { class: 'required', aria: { labelledby: 'barcode barcode-status' } } %>
-        <span class="nypl-field-status" id="barcode-status" aria-live="assertive" aria-atomic="true">Enter a single barcode.</span>
+        <label class="required" id="transfer-barcode">Barcode</label><span class="nypl-required-field"> Required</span>
+        <%= text_field_tag :barcode, @barcode, { class: 'required', aria: { labelledby: 'transfer-barcode transfer-barcode-status' } } %>
+        <span class="nypl-field-status" id="transfer-barcode-status" aria-live="assertive" aria-atomic="true">Enter a single barcode.</span>
       </div>
       <br/>
       <div class="nypl-text-field-with-label">
