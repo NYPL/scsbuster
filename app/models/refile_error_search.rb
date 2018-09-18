@@ -32,10 +32,10 @@ class RefileErrorSearch
         self.bearer = JSON.parse(response.body)["access_token"]
       else
         self.bearer = nil
-        Rails.logger.warn("Bad response getting bearer token, response code is #{response.code}")
+        CustomLogger.new("level" => "WARNING", "message" => "Bad response getting bearer token, response code is #{response.code}").log_message
       end
     rescue Exception => e
-      Rails.logger.error("Error getting bearer #{e.backtrace}")
+      CustomLogger.new("level" => "ERROR", "message" => "Error getting bearer #{e.backtrace}").log_message
       self.bearer = nil
     end
   end
@@ -78,7 +78,7 @@ class RefileErrorSearch
     if response.code == "200"
       JSON.parse(response.body)
     else
-      Rails.logger.warn("Error getting refiles, response code #{response.code}")
+      CustomLogger.new("level" => "WARNING", "message" => "Error getting refiles, response code #{response.code}").log_message
       {}
     end
   end
