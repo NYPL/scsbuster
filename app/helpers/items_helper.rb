@@ -1,4 +1,9 @@
 module ItemsHelper
+
+  def date_dropdown_classes(prefix)
+    {year: "#{prefix}_year", month: "#{prefix}_month", day: "#{prefix}_day"}
+  end
+
   def refile_pagination(refile_error_search, refiles)
     result = ''
     if refile_error_search.page != 1
