@@ -57,7 +57,7 @@
         <span>Start Date</span>
         <span class="nypl-required-field"> Required</span>
       </label>
-      <p><%= date_select "refile_error_search", "date_start", use_month_numbers: true, start_year: 2010, end_year: Date.current.year, selected: @this_start_date, order: [:month, :day, :year], aria: { labelledby: 'startDate-label startDate-status' } %></p>
+      <p><%= date_select "refile_error_search", "date_start", use_month_numbers: true, start_year: 2010, end_year: Date.current.year, selected: @this_start_date, order: [:month, :day, :year] %></p>
       <span class="nypl-field-status" id="startDate-status" aria-live="assertive" aria-atomic="true">The start date as the format as MM/DD/YYYY</span>
     </div>
     <span class="date-divider">to</span>

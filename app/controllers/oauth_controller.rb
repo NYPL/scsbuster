@@ -61,12 +61,12 @@ class OauthController < ApplicationController
         else
           # Clear the session if the user is not authorized
           reset_session
-          Rails.logger.debug('The user is not authorized.')
+          CustomLogger.new("level" => "DEBUG", "message" => "The user is not authorized.").log_message
           redirect_to error_path(type: 'user_not_authorized')
         end
 
       rescue
-        Rails.logger.debug('Failed to get access token.')
+        CustomLogger.new("level" => "DEBUG", "message" => "Failed to get access token.").log_message
         # Clear the session if OAuth authentication process fails
         reset_session
         redirect_to error_path(type: 'authentication_failed')
@@ -87,8 +87,7 @@ class OauthController < ApplicationController
   #
   # @param [String] previous_url the previous URL that we need to redirect back after getting the new access token
   def refresh_access_token(previous_url = root_path)
-    Rails.logger.debug('Going to refresh access token.')
-
+    CustomLogger.new("level" => "DEBUG", "message" => "Refreshing access token.").log_message
     # Set the parametets to call refresh access token API
     begin
       refresh_params = {
@@ -110,7 +109,7 @@ class OauthController < ApplicationController
 
       redirect_to previous_url
     rescue
-      Rails.logger.debug('Failed to refresh access token.')
+      CustomLogger.new("level" => "DEBUG", "message" => "Failed to refresh access token.").log_message
       # Clear the old session
       reset_session
       redirect_to authenticate_path

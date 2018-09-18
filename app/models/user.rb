@@ -23,7 +23,7 @@ class User
       response = s3.get_object({ bucket: ENV['AUTHORIZED_USER_BUCKET'], key: 'authorization.json' })
       authorized_list = response.body.read
     rescue Aws::S3::Errors::ServiceError
-      Rails.logger.debug('Failed to get the authorized user list from AWS S3.')
+      CustomLogger.new("level" => "DEBUG", "message" => "Failed to get the authorized user list from AWS S3.").log_message
     end
     authorized_list
   end

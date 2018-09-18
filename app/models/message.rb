@@ -38,7 +38,6 @@ class Message
           })
         }
       ]
-
     sqs.send_message(entries)
   end
 
