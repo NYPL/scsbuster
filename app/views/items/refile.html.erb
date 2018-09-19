@@ -21,7 +21,7 @@
           <div class="flash_error flash_message nypl-required-field" id="flash_error">
             <p><%= v.join('<br/>').html_safe if v.present? %></p>
           </div>
-        <% end %> 
+        <% end %>
       <% end %>
     <% end %>
   </div>
@@ -57,7 +57,7 @@
         <span>Start Date</span>
         <span class="nypl-required-field"> Required</span>
       </label>
-      <p><%= date_select "refile_error_search", "date_start", use_month_numbers: true, start_year: 2010, end_year: Date.current.year, selected: @this_start_date, order: [:month, :day, :year], aria: { labelledby: 'startDate-label startDate-status' } %></p>
+      <p><%= date_select "refile_error_search", "date_start", with_css_classes: date_dropdown_classes('start'), use_month_numbers: true, start_year: 2010, end_year: Date.current.year, selected: @this_start_date, order: [:month, :day, :year], aria: { labelledby: 'startDate-label startDate-status' } %></p>
       <span class="nypl-field-status" id="startDate-status" aria-live="assertive" aria-atomic="true">The start date as the format as MM/DD/YYYY</span>
     </div>
     <span class="date-divider">to</span>
@@ -66,7 +66,7 @@
         <span>End Date</span>
         <span class="nypl-required-field"> Required</span>
       </label>
-      <p><%= date_select "refile_error_search", "date_end", use_month_numbers: true, start_year: 2010, end_year: Date.current.year, selected: @this_end_date, order: [:month, :day, :year], aria: { labelledby: 'endDate-label endDate-status' } %></p>
+      <p><%= date_select "refile_error_search", "date_end", use_month_numbers: true, with_css_classes: date_dropdown_classes('end'), start_year: 2010, end_year: Date.current.year, selected: @this_end_date, order: [:month, :day, :year], aria: { labelledby: 'endDate-label endDate-status' } %></p>
       <span class="nypl-field-status" id="endDate-status" aria-live="assertive" aria-atomic="true">The end date as the format as MM/DD/YYYY</span>
     </div>
     <div class="nypl-submit-button-wrapper"><%= submit_tag 'Submit', class: "nypl-primary-button" %></div>
