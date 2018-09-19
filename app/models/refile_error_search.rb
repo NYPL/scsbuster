@@ -35,7 +35,7 @@ class RefileErrorSearch
         Rails.logger.warn("Bad response getting bearer token, response code is #{response.code}")
       end
     rescue Exception => e
-      Rails.logger.error("Error getting bearer #{e.backtrace}")
+      Rails.logger.fatal("Error getting bearer #{e.backtrace}")
       self.bearer = nil
     end
   end
