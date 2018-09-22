@@ -7,4 +7,8 @@ module Helpers
   def click_submit_value(action)
     find(:xpath, "//input[@type='submit' and translate(@value,'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')='#{action}']").click
   end
+
+  def cut_off_sqs!
+    allow_any_instance_of(SqsClient).to receive(:send_message) { true }
+  end
 end

@@ -2,9 +2,12 @@ require 'rails_helper'
 
 describe 'Update metadata errors' do
   describe 'When on the Update SCSB Metadata page' do
+
     before(:each) do
       skip_authentication_to(update_metadata_path)
+      cut_off_sqs!
     end
+
     describe 'It should fail for these conditions' do
       it ' - non-numerical barcode (error msg: must be 14 numerical digits in length)' do
         aggregate_failures 'check-num' do
