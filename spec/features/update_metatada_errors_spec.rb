@@ -21,7 +21,7 @@ describe 'Update metadata errors' do
 
       it ' - too long barcode (error msg: must be 14 numerical digits in length)' do
         aggregate_failures 'check-long' do
-          fill_in('barcodes', with: 'x' * 15)
+          fill_in('barcodes', with: '1' * 15)
           click_submit_value('submit')
           within('#flash_error') do
             expect(find(:xpath, "//div[@id='flash_error']/p").text.downcase).to include('must be 14 numerical digits in length')
@@ -31,7 +31,7 @@ describe 'Update metadata errors' do
 
       it ' - too short barcode (error msg: must be 14 numerical digits in length)' do
         aggregate_failures 'check-short' do
-          fill_in('barcodes', with: 'x' * 13)
+          fill_in('barcodes', with: '1' * 13)
           click_submit_value('submit')
           within('#flash_error') do
             expect(find(:xpath, "//div[@id='flash_error']/p").text.downcase).to include('the barcode(s) remaining are invalid', 'each barcode must be 14 numerical digits in length', 'separate barcodes using commas or returns (new lines)')
