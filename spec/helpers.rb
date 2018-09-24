@@ -1,3 +1,5 @@
+require File.join(Rails.root, 'lib', 'sqs_client')
+
 module Helpers
   def skip_authentication_to(path)
     allow_any_instance_of(OauthController).to receive(:authenticate) { true }
