@@ -34,7 +34,7 @@
         <%= text_field_tag :barcode, @barcode, { class: 'required', aria: { labelledby: 'send-refile-barcode barcode-status' } } %>
         <span class="nypl-field-status" id="barcodes-status" aria-live="assertive" aria-atomic="true">Enter a single barcode. Make sure the item is available in SCSB first.</span>
       </div>
-      <div class="nypl-submit-button-wrapper"><%= submit_tag 'Submit', class: "nypl-primary-button" %></div>
+      <div class="nypl-submit-button-wrapper"><%= submit_tag 'Submit', class: "nypl-primary-button", id: "refileRequestSubmitButton" %></div>
     </p>
   </div>
 <% end -%>
