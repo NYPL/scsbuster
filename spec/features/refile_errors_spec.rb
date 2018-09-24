@@ -11,7 +11,7 @@ describe 'SCSBuster Refile errors' do
     describe 'Given an incorrect barcode is entered' do
       describe 'When barcode is too long' do
         before(:each) do
-          @this_error_barcode = 'x' * 21
+          @this_error_barcode = '1' * 21
         end
 
         it ' - 21 character barcode should display error msg: must be up to 20 alphanumeric characters in length' do
