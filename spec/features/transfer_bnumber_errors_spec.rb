@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 describe 'SCSBuster transfer barcode with bnumber errors' do
-	describe "When on the Transfer Barcode & Update Metadata page" do
-	
+  describe "When on the Transfer Barcode & Update Metadata page" do
+
     before(:each) do
       skip_authentication_to(transfer_metadata_path)
       cut_off_sqs!
@@ -122,6 +122,6 @@ describe 'SCSBuster transfer barcode with bnumber errors' do
           end
         end
       end
-		end
-	end
+    end
+  end
 end
