@@ -7,7 +7,7 @@ describe 'SCSBuster Refile success' do
         allow_any_instance_of(RefileErrorSearch).to receive(:get_refiles) { {} }
         # Don't actually hit the refile request endpoint
         allow_any_instance_of(RefileRequest).to receive(:post_refile) { {} }
-        skip_authentication_to(refile_path) { nil }
+        skip_authentication_to(refile_path)
         @good_barcode = 'b11556466x'
       end
 
