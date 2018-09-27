@@ -12,6 +12,7 @@ gem 'jquery-rails', '~> 4.3', '>= 4.3.3'
 gem 'aws-sdk-sqs', '~> 1.3'
 gem 'aws-sdk-s3', '~> 1'
 gem 'jwt'
+gem 'nypl_log_formatter', '~> 0.1.3'
 
 # Used in asset pipeline for styling
 gem 'design-toolkit', :git => 'https://github.com/NYPL/design-toolkit.git'
@@ -26,6 +27,7 @@ group :development, :test do
   gem 'rspec'
   gem 'rspec-rails', '~> 3.7'
   gem 'rails-controller-testing'
+  gem 'capybara', '~> 3.8'
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
 end
 
