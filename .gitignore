@@ -36,3 +36,7 @@
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
+
+# Ignore vim swapfiles
+*.swo
+*.swp
