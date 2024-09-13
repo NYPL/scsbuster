@@ -6,6 +6,11 @@ rvm:
 cache: bundler
 services:
 - docker
+branches:
+  only:
+  - development
+  - qa
+  - production
 script:
 - bundle exec rspec
 after_success:
