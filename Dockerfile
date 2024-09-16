@@ -1,4 +1,4 @@
-FROM phusion/passenger-ruby25:0.9.35 AS production
+FROM phusion/passenger-ruby33 AS production
 
 # Set correct environment variables.
 ENV HOME /root
