@@ -23,10 +23,12 @@ ADD ./provisioning/docker_build/scsbuster.conf /etc/nginx/sites-enabled/scsbuste
 COPY --chown=app:app . /home/app/scsbuster
 
 ## Bundle Gems
-# https://stackoverflow.com/questions/47972479/after-ruby-update-to-2-5-0-require-bundler-setup-raise-exception
-RUN cd /home/app/scsbuster && gem update --system
-RUN cd /home/app/scsbuster && bundle install --without test development
-RUN cd /home/app/scsbuster && RAILS_ENV=production bundle exec rake assets:precompile
+WORKDIR /home/app/scsbuster
+COPY Gemfile /home/app/scsbuster
+COPY Gemfile.lock /home/app/scsbuster
+RUN gem update --system
+RUN bundle install --without test development
+RUN RAILS_ENV=production bundle exec rake assets:precompile
 RUN chown -R app:app /home/app/scsbuster/tmp/cache
 
 # Enables ngnix+passenger
@@ -38,5 +40,6 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 FROM production AS development
 
 RUN cd /home/app/scsbuster && bundle --with test development
+
 # It will be linked from localhost
 RUN rm -rf /home/app/scsbuster/*
