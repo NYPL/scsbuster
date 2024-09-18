@@ -42,4 +42,4 @@ FROM production AS development
 RUN cd /home/app/scsbuster && bundle --with test development
 
 # It will be linked from localhost
-RUN rm -rf /home/app/scsbuster/*
+#RUN rm -rf /home/app/scsbuster/*
