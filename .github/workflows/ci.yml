@@ -15,6 +15,15 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v2
+
+      - name: set up docker
+        uses: docker/setup-buildx-action@v2
+
+      - name: install docker dompose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+
       - name: build and test
         run: |
           docker-compose build
