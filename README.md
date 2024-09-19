@@ -56,4 +56,4 @@ Our branches (in order of stability are):
 
 Merging `feature_branch` => `qa` automatically deploys to the qa environment.
 Merging `qa` => `production` automatically deploys to the production environment.
-After a release, please backmerge production to qa with a PR.a
+After a release, please backmerge production to qa with a PR.
