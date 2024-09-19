@@ -22,7 +22,7 @@ Forget Docker is there.**
 ### Testing
 
 1.  `docker-compose run webapp bash` (brings up a web container)
-1.  `bundle exec rspec` (in container)
+1.  `RAILS_ENV=test bundle exec rspec` (in container)
 1.  `exit` to leave the container.
 
 ### Rails Console

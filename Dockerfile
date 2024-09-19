@@ -40,6 +40,3 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 FROM production AS development
 
 RUN cd /home/app/scsbuster && bundle --with test development
-
-# It will be linked from localhost
-#RUN rm -rf /home/app/scsbuster/*
