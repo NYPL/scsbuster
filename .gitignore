@@ -40,3 +40,8 @@
 # Ignore vim swapfiles
 *.swo
 *.swp
+
+# Ignore Terraform log files
+.terraform
+*.tfstate
+*.tfstate.*

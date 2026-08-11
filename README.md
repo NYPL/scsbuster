@@ -57,3 +57,13 @@ Our branches (in order of stability are):
 Merging `feature_branch` => `qa` automatically deploys to the qa environment.
 Merging `qa` => `production` automatically deploys to the production environment.
 After a release, please backmerge production to qa with a PR.
+
+### Terraform
+
+Most AWS infrastructure for SCSBuster is managed by the DevOps team through their Terraform configurations and state.
+
+This repository contains a limited Terraform configuration used to manage application-specific monitoring resources owned by the Research Catalog team,
+found in the `terraform/` directory.
+
+Changes to application alarms should be made through this Terraform configuration. If changes to other core AWS infrastructure (ECS configuration,
+load balancing, etc.) are necessary, DevOps must update their Terraform.
