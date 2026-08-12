@@ -1,3 +1,8 @@
+import {
+  to = aws_cloudwatch_metric_alarm.scsbuster_error_alarm
+  id = "SCSBusterErrorAlarm"
+}
+
 data "aws_sns_topic" "rc_alarms" {
   name = "research-catalog-team-alarms-production"
 }
