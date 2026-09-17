@@ -1,31 +1,26 @@
-import {
-  to = aws_cloudwatch_metric_alarm.scsbuster_error_alarm
-  id = "SCSBusterErrorAlarm"
-}
-
 data "aws_sns_topic" "rc_alarms" {
   name = "research-catalog-team-alarms-production"
 }
 
-resource "aws_cloudwatch_log_metric_filter" "scsbuster_error" {
-  name           = "SCSBusterError"
+resource "aws_cloudwatch_log_metric_filter" "log_error" {
+  name           = "SCSBusterLogError"
   pattern        = "{ $.level = FATAL }"
   log_group_name = "/ecs/scsbuster-production-tf"
 
   metric_transformation {
-    name      = "SCSBusterError"
+    name      = "SCSBusterLogError"
     namespace = "LogMetrics"
     value     = "1"
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "scsbuster_error_alarm" {
-  alarm_name = "SCSBusterErrorAlarm"
+resource "aws_cloudwatch_metric_alarm" "log_error_alarm" {
+  alarm_name = "SCSBusterLogErrorAlarm"
 
   alarm_description = "Triggered when there's 1 or more fatal error log to SCSBuster within 5 minutes."
 
   namespace   = "LogMetrics"
-  metric_name = "SCSBusterError"
+  metric_name = "SCSBusterLogError"
 
   statistic = "Sum"
 
