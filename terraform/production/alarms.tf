@@ -4,7 +4,7 @@ data "aws_sns_topic" "rc_alarms" {
 
 resource "aws_cloudwatch_log_metric_filter" "log_error" {
   name           = "SCSBusterLogError"
-  pattern        = "{ $.level = FATAL }"
+  pattern        = "{ $.level = \"FATAL\" }"
   log_group_name = "/ecs/scsbuster-production-tf"
 
   metric_transformation {
