@@ -41,7 +41,7 @@
 *.swo
 *.swp
 
-# Ignore Terraform log files
-.terraform
+# Terraform
+.terraform*
+*.hcl
 *.tfstate
-*.tfstate.*
