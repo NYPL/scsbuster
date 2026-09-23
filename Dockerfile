@@ -1,7 +1,7 @@
 FROM phusion/passenger-ruby33 AS production
 
 # Set correct environment variables.
-ENV HOME /root
+ENV HOME=/root
 
 # Use baseimage-docker's init process.
 RUN mkdir -p /etc/my_init.d
@@ -27,7 +27,8 @@ WORKDIR /home/app/scsbuster
 COPY Gemfile /home/app/scsbuster
 COPY Gemfile.lock /home/app/scsbuster
 RUN gem update --system
-RUN bundle install --without test development
+RUN bundle config set without 'test development'
+RUN bundle install
 RUN RAILS_ENV=production bundle exec rake assets:precompile
 RUN chown -R app:app /home/app/scsbuster/tmp/cache
 
